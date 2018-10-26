@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1540054374475.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1807922255",
+    "id" : "26EE227C",
+    "lastKnownWriteTime" : 1540054400,
+    "last_content_update" : 1540054422057,
+    "path" : "~/Documents/ACP - Eaux/ACP.R",
+    "project_path" : "ACP.R",
+    "properties" : {
+        "cursorPosition" : "2,31",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
