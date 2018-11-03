@@ -2,7 +2,7 @@
 # Projet Eaux1819 
 #-----------------#
 
-waters <- read.table("/home/sol/Téléchargements/Eaux2018 FM.txt", header=TRUE, sep="\t")
+waters <- read.table("./Eaux2018 FM.txt", header=TRUE, sep="\t")
 attach(waters)
 
 # --- I. DESCRIPTION ET ANALYSE DE DONNEES UNIVARIEES ET BIVARIEES --- #
@@ -69,5 +69,7 @@ cor(waters$K, waters$Na, use="complete.obs")
 
 # --- II. DESCRIPTIONS MULTIVARIEES --- #
 # ACP #
+library(ade4)
+cleared_variables = na.omit(num_variables)
 # Classification non supervisée #
 # Classification supervisée #
