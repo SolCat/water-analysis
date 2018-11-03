@@ -30,7 +30,19 @@ acpn = function(data_in){
   result$cor = t(result$cenred) %*% result$cenred / (num_row - 1)
   
   #Valeurs propres
-  result$eigen = eigen(result$cor)
+  eigen_full = eigen(result$cor)
+  result$eigen$values = eigen_full$values[eigen_full$values>1.0]
+  result$eigen$vectors = eigen_full$vectors[,1:length(result$eigen$values)]
+  
+  #Composantes principales
+  result$comp = result$cenred %*% result$eigen$vectors
+  
+  #Inertie
+  result$inertia <- apply(result$comp^2,1,sum)/num_col 
+  
+  #Matrice des coordonnées de variables
+  result$stddev = diag(sapply(diag(as.matrix(result$eigen$values)), function(x){1/sqrt(x)}))
+  #result$coords = 
   
   #Retour
   return(result)
@@ -43,4 +55,4 @@ acp_eau = acpn(eaux)
 
 
 #eaux_actives <- filter(eaux, Pays== "France")
-#dudi.pca(df = acp_eau$raw_data, scannf = FALSE, nf = 2)
+#dudi.pca(df = acp_eau$raw_data, scannf = FALSE, nf = 3)
