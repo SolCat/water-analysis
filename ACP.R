@@ -1,3 +1,5 @@
+library(plotrix)
+
 acpn = function(data_in, round_precision = 3){  
   result = list()
   #Filtre
@@ -82,16 +84,35 @@ acpn = function(data_in, round_precision = 3){
   }
   result$ctri = round(result$ctri, round_precision)
   
+  #Cercle de corrélation
+  apply(combn(1:length(result$eigen$values), 2), 2, function(combi){
+    axis1 = result$coords[,combi[1]]
+    axis2 = result$coords[,combi[2]]
+    par(mfrow=c(1,1))
+    plot(axis1, axis2, xlim=c(-1,1), ylim=c(-1,1), asp = 1, type = "n", xlab = sprintf("Axe %d",combi[1]), ylab = sprintf("Axe %d",combi[2]), main = sprintf("Cercle des corrélations dans le plan %d-%d", combi[1], combi[2]) )
+    abline(h=0,v=0)
+    draw.circle(x = 0, y = 0, radius = c(1,1))
+    arrows(0, 0, axis1, axis2, length = 0.10, code = 2, col = gray(0.6))
+    text(x=axis1, y=axis2, labels = colnames(result$raw_data), font=2) 
+  })
+  
   #Retour
   return(result)
 }
 
+addIndiv = function(acp, indiv){
+  return( t(scale(as.matrix(na.omit(indiv[sapply(indiv, is.numeric)]), rownames.force = NA), center = TRUE, scale = TRUE) %*% acp$eigen$vectors ))
+}
+
 library(ade4)
 
-eaux <- read.table("./Eaux2018 FM.txt", header=TRUE, sep="\t")
-acp_eau = acpn(eaux)
+waters <- read.table("./Eaux2018 FM.txt", header=TRUE, sep="\t")
+active.waters <- waters[waters$Pays %in% "France",] 
+supp.waters <- waters[waters$Pays %in% "Maroc",] 
+acp_waters = acpn(active.waters)
 
+supps = t(addIndiv(acp_waters, supp.waters))
 
 #eaux_actives <- filter(eaux, Pays== "France")
 #dudi.pca(df = acp_eau$raw_data, scannf = FALSE, nf = 3)
->>>>>>> 187e082f8418661ce9974f5eb1d3f6d6e8836179
+
