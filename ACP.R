@@ -1,5 +1,4 @@
-acpn = function(data_in, round_precision = 3){
-  
+acpn = function(data_in, round_precision = 3){  
   result = list()
   #Filtre
   result$raw_data = na.omit(data_in[sapply(data_in, is.numeric)])
@@ -95,3 +94,4 @@ acp_eau = acpn(eaux)
 
 #eaux_actives <- filter(eaux, Pays== "France")
 #dudi.pca(df = acp_eau$raw_data, scannf = FALSE, nf = 3)
+>>>>>>> 187e082f8418661ce9974f5eb1d3f6d6e8836179
