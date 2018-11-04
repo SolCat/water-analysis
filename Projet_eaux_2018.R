@@ -97,7 +97,7 @@ round(cumsum(100*auto.acp$eig/sum(auto.acp$eig)), 3)
 
 ### 2.1.2. Projection des variables et observations dans un plan donné ###
 # Analyse des variables
-var.inertie <- inertia.dudi(acp, col.inertia=TRUE)
+var.inertie <- inertia.dudi(auto.acp, col.inertia=TRUE)
 round(auto.acp$co,3)
 F <- round(acp$li,2) # Matrice des composantes principales
 var.ctr <- var.inertie$col.abs/100 # (Contribution des variables en %)
@@ -109,7 +109,7 @@ s.corcircle(auto.acp$co, xax=2, yax=3) # Cercle des corrélations dans le plan 2
 
 # Analyse des individus
 round(auto.acp$l1, 3) # Analyse des observations
-obs.inertie <- inertia.dudi(acp, row.inertia=TRUE)
+obs.inertie <- inertia.dudi(auto.acp, row.inertia=TRUE)
 obs.ctr <- obs.inertie$row.abs/100 # (Contribution des observations en %)
 obs.qlt <- obs.inertie$row.re/100 # (Qualité des observations en %)
 
@@ -168,3 +168,28 @@ text(csup2, csup3, row.names(ligsup$lisup), col="red", cex=1.2)
 labsup <-c("Sisi", "Sidi", "Ain Sa", "Oulmès", "Ain So", "Ain A", "Ain I", "Ain C", "Bahia", "Ciel", "Mazine") 
 s.arrow(auto.acp[1:5]$l1, sub="Graphe ACP Eaux actives et supplémentaires", possub="bottomright", ylim=c(-1,2))
 s.label(suprow(auto.acp, new.supp.waters[,3:11])$lisup, label=labsup, add.plot=TRUE, clab=1)
+
+## 2.2. ACP sur le deuxième jeu de données ##
+library(DMwR)
+new.waters <- knnImputation(waters, k=10, scale=T, meth="weighAvg", distData=NULL) # On fixe k à 10 voisins
+new.active.waters <- new.waters[new.waters$Pays %in% "France",] 
+# On réitère l'ACP sur le même jeu de données
+acp.variables <- new.active.waters[sapply(new.active.waters, is.numeric)] # On ne conserve que les obs. actives
+new.auto.acp <- dudi.pca(df = acp.variables, center = TRUE, scale = TRUE, scannf = FALSE, nf = 9)
+round(new.auto.acp$eig,3)
+round(cumsum(100*new.auto.acp$eig/sum(new.auto.acp$eig)), 3)
+var.inertie <- inertia.dudi(new.auto.acp, col.inertia=TRUE)
+round(new.auto.acp$co,3)
+F <- round(new.auto.acp$li,2) # Matrice des composantes principales
+var.ctr <- var.inertie$new.col.abs/100 # (Contribution des variables en %)
+var.qlt <- var.inertie$col.re/100 # (Qualité des variables en %)
+s.corcircle(new.auto.acp$co, xax=1, yax=2) # Cercle des corrélations dans le plan 1-2
+s.corcircle(new.auto.acp$co, xax=1, yax=3) # Cercle des corrélations dans le plan 1-3
+s.corcircle(new.auto.acp$co, xax=2, yax=3) # Cercle des corrélations dans le plan 2-3
+round(new.auto.acp$l1, 3) # Analyse des observations
+obs.inertie <- inertia.dudi(new.auto.acp, row.inertia=TRUE)
+obs.ctr <- obs.inertie$row.abs/100 # (Contribution des observations en %)
+obs.qlt <- obs.inertie$row.re/100 # (Qualité des observations en %)
+#abs(round(obs.qlt,4)[1]+round(obs.qlt,4)[2])
+#abs(round(obs.qlt,4)[1])+abs(round(obs.qlt,4)[3])
+#abs(round(obs.qlt,4)[2])+abs(round(obs.qlt,4)[3])
