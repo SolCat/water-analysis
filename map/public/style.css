@@ -1,0 +1,14 @@
+body {
+  background-color: #2c3e50;
+}
+
+svg {
+  display: block;
+  margin: auto;
+}
+
+path {
+  stroke: #7f8c8d;
+  fill: #ecf0f1;
+  stroke-width: 1;
+}

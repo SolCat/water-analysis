@@ -2,6 +2,8 @@ library(plotrix)
 
 acpn = function(data_in, round_precision = 3){  
   result = list()
+  
+  result$source = data_in
   #Filtre
   result$raw_data = na.omit(data_in[sapply(data_in, is.numeric)])
   result$matrix = as.matrix(result$raw_data, rownames.force = NA)
@@ -39,7 +41,7 @@ acpn = function(data_in, round_precision = 3){
   result$comp = result$cenred %*% result$eigen$vectors
   
   #Rapport de l'inertie
-  result$inertiaratio = acp_eau$eigen$values / num_col
+  result$inertiaratio = result$eigen$values / num_col
   
   #Inertie cumulée
   result$inertiasum = round(sum(result$inertiaratio),3)*100
@@ -112,6 +114,23 @@ supp.waters <- waters[waters$Pays %in% "Maroc",]
 acp_waters = acpn(active.waters)
 
 supps = t(addIndiv(acp_waters, supp.waters))
+
+water_type = c()
+for(i in rownames(acp_waters$comp)){
+  type = acp_waters$source$Nature[strtoi(i)]
+  v = 0
+  print(type)
+  if(is.na(type)){}
+  else if(type == "plat"){
+    v=1
+  }else if(type == "gaz"){
+    v=2
+  }
+  water_type = c(water_type, v)
+}
+
+plot(acp_waters$comp[,1], acp_waters$comp[,2], xlab = "Axe 1", ylab = "Axe 2", col=water_type)
+legend(x = "bottomright",legend=unique(water_type),col=1:length(water_type),pch=1)
 
 #eaux_actives <- filter(eaux, Pays== "France")
 #dudi.pca(df = acp_eau$raw_data, scannf = FALSE, nf = 3)
