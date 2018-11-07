@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## 1. Analyse univariée et bivariée
 ###1.1 Etude du jeu de données
 
-`r waters <- read.table("/home/sol/Téléchargements/Eaux2018 FM.txt", header=TRUE, sep="\t")`
+`r waters <- read.table("./Eaux2018 FM.txt", header=TRUE, sep="\t")`
 
 La commande `head` nous donne un premier aperçu du jeu de données étudié. Il s'agit de données relatives aux caractéristiques et propriétés minérales de diverses eaux.
 ```{r}
@@ -80,8 +80,7 @@ Un examen plus fin, variable par variable, nous permettra de mieux apprécier le
 Le tracé de la boîte à moustache de la variable PH laisse apparaître une distribution symétrique. On note que les valeurs de sa moyenne (6.905) et sa médiane (7.000) sont très proches. Sa distribution, homogène et faiblement dispersée, semble s’approcher de celle d’une loi Normale (voire figure ci-contre).
 </div>
 
-```{r echo=FALSE, fig.align='center'}
-par(mfrow=c(1,2))
+```{r echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', out.width="49%"}
 boxplot(waters$PH, main="Boîte à moustache de la variable PH")
 hist(waters$PH, prob=TRUE, main="Histogramme et densité de probabilité du PH", xlab="PH")
 curve(dnorm(x, mean=mean(waters$PH, na.rm=TRUE), sd=sd(waters$PH, na.rm=TRUE)), add=TRUE, col="red")
@@ -95,8 +94,7 @@ L'histogramme du PH, approché par une courbe de densité en forme de "cloche", 
 
 La distribution de la variable NO3 est ici quelque peu différente : l’histogramme indique une distribution non-symétrique et non-homogène.
 
-```{r echo=FALSE, fig.align='center'}
-par(mfrow=c(1,2))
+```{r echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', out.width="49%"}
 boxplot(waters$NO3, main="Boîte à moustache de la variable NO3")
 hist(waters$NO3, prob=TRUE, main="Histogramme et densité de probabilité du NO3", xlab="NO3")
 curve(dnorm(x, mean=mean(waters$NO3, na.rm=TRUE), sd=sd(waters$NO3, na.rm=TRUE)), add=TRUE, col="red")

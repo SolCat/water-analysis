@@ -3,7 +3,7 @@
 waters <- read.table("./Eaux2018 FM.txt", header=TRUE, sep="\t")
 data = na.omit(waters[sapply(waters, is.numeric)])
 library(ade4)
-
+library(ggplot2)
 
 set.seed(3)
 classi = kmeans(data, 5)
