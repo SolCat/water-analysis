@@ -110,7 +110,7 @@ Le tracé de la boîte à moustache de cette variable révèle la présence de n
 Les variables Cl, K, SO4 et HCO3 témoignent d’une distribution à nouveau non symétrique, peu homogène, enregistrant un grand nombre de valeurs extrêmes. Le tracé de leur densité de probabilité s’éloigne ici d’une loi normale. 
 </div>
 
-```{r echo=FALSE, out.width="8", fig.align='center'}
+```{r echo=FALSE, fig.height=8, fig.width=10, out.width="100%", fig.align='center'}
 par(mfrow=c(2,2))
 hist(waters$Cl, prob=TRUE, main="Histogramme et densité de probabilité du Cl", xlab="Cl")
 curve(dnorm(x, mean=mean(waters$Cl, na.rm=TRUE), sd=sd(waters$Cl, na.rm=TRUE)), add=TRUE, col="red")
@@ -169,8 +169,10 @@ round(cor(waters[sapply(waters, is.numeric)], use="complete.obs"),3)
 ```
 
 <div style="text-align:justify">
-Les variables les plus corrélées positivement sont les variables HCO3 et NA (0.910), Na et K (0.867) et HCO3 et K (0.883) : elles varient simultanément de façon semblable.<br/>
-On remarque que le PH est corrélé négativement à toutes les autres variables, exception faite du composant S04. Le comportement de cette variable est donc, de façon générale, opposé à celui des autres variables.<br/>
+Les variables les plus corrélées positivement sont les variables HCO3 et NA (0.910), Na et K (0.867) et HCO3 et K (0.883) : elles varient simultanément de façon semblable.  
+  
+On remarque que le PH est corrélé négativement à toutes les autres variables, exception faite du composant S04. Le comportement de cette variable est donc, de façon générale, opposé à celui des autres variables.  
+  
 Il faut cependant rester vigilant quant aux résultats obtenus. En effet, la présence de valeurs extrêmes peut venir perturber notre analyse, ici portée sur l’étude des corrélations. En effet, le coefficient de corrélation de Pearson (méthode par défaut) est très sensible aux valeurs de données extrêmes. Il peut donc être intéressant de réitérer cette analyse sans prendre en compte cette fois-ci les données extrêmes/outliers enregistrés, soit en les supprimant, soit en transformant les variables pour rendre plus symétriques et moins étalées certaines distributions (en prenant les logarithmes par exemple). Comme nous avons déjà généré, lors de l’étape précédente, un nouveau jeu de données diminué des valeurs extrêmes enregistrées, nous mettrons en oeuvre ici la première option.
 </div>
 
