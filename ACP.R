@@ -1,4 +1,5 @@
 library(plotrix)
+library(ade4)
 
 acpn = function(data_in, round_precision = 3){  
   result = list()
@@ -106,7 +107,6 @@ addIndiv = function(acp, indiv){
   return( t(scale(as.matrix(na.omit(indiv[sapply(indiv, is.numeric)]), rownames.force = NA), center = TRUE, scale = TRUE) %*% acp$eigen$vectors ))
 }
 
-library(ade4)
 
 waters <- read.table("./Eaux2018 FM.txt", header=TRUE, sep="\t")
 active.waters <- waters[waters$Pays %in% "France",] 
@@ -133,5 +133,7 @@ plot(acp_waters$comp[,1], acp_waters$comp[,2], xlab = "Axe 1", ylab = "Axe 2", c
 legend(x = "bottomright",legend=unique(water_type),col=1:length(water_type),pch=1)
 
 #eaux_actives <- filter(eaux, Pays== "France")
-#dudi.pca(df = acp_eau$raw_data, scannf = FALSE, nf = 3)
+dudi = dudi.pca(df = acp_waters$raw_data, scannf = FALSE, nf = 3)
+
+cor(acp_waters$matrix[setdiff(c(1:nrow(acp_waters$matrix)), unique(unlist(apply(acp_waters$matrix, 2, function(x){which(x %in% boxplot.stats(x)$out)})))),])
 
