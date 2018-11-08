@@ -1,3 +1,4 @@
+
 ---
 title: 'Projet - Etude des Eaux '
 author: "Solène Catella, Hugo Le Baher"
@@ -13,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-
+L'eau est un élément central et essentiel dans notre vie quotidienne. 
 
 ## 1. Analyse univariée et bivariée
 ###1.1 Etude du jeu de données
@@ -37,7 +38,9 @@ On note que certaines données sont incomplètes. En effet, toutes les variables
 </div>
 
 ### 1.2 Analyse exloratoire des données
-####<br/> 1.2.1 Recherche des données manquantes
+####1.2.1 Recherche des données manquantes
+
+On s'intéresse dans un premier temps aux données manquantes, représentées via le symbole <em>NA</em>.
 
 ```{r}
 colSums(is.na(waters))
@@ -49,20 +52,51 @@ Parmi les variables étudiées, on remarque que le NO3 et le PH sont celles qui 
 * Supprimées, de façon à ne conserver que les observations complètes ;
 * Imputées par une valeur plausible ou aléatoire (méthodes d’imputation simples et multiples).
 
-L’étude statistique unidimensionnelle peut nous aider à mieux appréhender la distribution des différentes variables, et préférer l’une ou l’autre de ces méthodes. Dans la mesure où l’Analyse en Composantes Principales (ACP) est une méthode appliquée à des variables quantitatives continues, nous nous intéresserons principalement à ces dernières, et plus précisément à celles qui enregistrent des valeurs manquantes (PH, NO3, Cl, K, SO4 et HCO3). 
+L’étude statistique unidimensionnelle peut nous aider à mieux appréhender la distribution des différentes variables, et préférer l’une ou l’autre de ces méthodes. Dans la mesure où l’Analyse en Composantes Principales (ACP) est une méthode appliquée à des variables quantitatives continues, nous nous intéresserons particulièrement à ces dernières, après avoir brièvement analyser les variables qualitatives.
 </div>
 
-####<br/> 1.2.2 Analyse unidimensionnelle : variables quantitatives
+####<br/> 1.2.2 Analyse unidimensionnelle : variables qualitatives
+
+Le jeu de données comprend 3 variables qualitatives : le nom de l'eau (Nom), sa nature (Nature) et son origine (Pays).
+
+```{r echo=FALSE}
+cat.variables <- waters[sapply(waters, is.factor)]
+```
+
+Il peut ici être intéressant de s'intéresser aux propriétés minérales des eaux plates et gazeuses.
+
+```{r echo=FALSE}
+still.waters <- subset(waters, waters$Nature=='plat', select=Ca:PH)
+gaz.waters <- subset(waters[sapply(waters, is.numeric)], waters$Nature=='gaz')
+```
+```{r}
+summary(still.waters)
+summary(gaz.waters)
+```
 
 <div style="text-align:justify">
-La commande `summary` fournit un résumé détaillé des variables étudiées, ici numériques (minimum, premier quartile, médiane, moyenne, troisième quartile et maximum).
+Ces résumés nous indiquent que les eaux gazeuses sont en moyenne plus riches que les eaux plates tous minéraux confondus, à l'exception des nitrates (NO3) et sulfates (SO4). Les composants minéraux qui semblent être les plus discriminants dans la distinction des eaux plates et gazeuses sont le HCO3 et le Na (comparaison des médianes). On note également que les eaux gazeuses enregistrent un PH légèrement inférieur aux eaux plates. 
+
+Il peut aussi être pertinent de s'intéresser à la répartition des eaux plates et gazeuses en France et au Maroc. Le diagramme en mosaïque (mosaic plot) permet de visualiser les effectifs relatifs à un tableau de contingence, ici donné par les variables Pays et Nature. 
 </div>
 
+```{r fig.align='center'}
+table(waters$Nature, waters$Pays) 
+mosaicplot(~waters$Pays+waters$Nature, data=waters, main="Répartition des eaux par Nature et Pays", color=TRUE)
+```
+
+On remarque que les eaux plates sont en quantité supérieure, représentant à peu près 2/3 du jeu de données. Les eaux gazeuses sont exclusivement françaises : il n'y a pas d'eaux marocaines gazeuses. On peut aussi relever que les eaux marocaines sont très peu représentées vis-à-vis des eaux françaises, raison pour laquelle elles sont sans doute traitées dans cette analyse comme des observations supplémentaires.
+
+####<br/> 1.2.3 Analyse unidimensionnelle : variables quantitatives
+
+<div style="text-align:justify">
+Nous nous intéressons désormais aux variables quantitatives.
+ 
+La commande `summary` fournit un résumé détaillé des variables étudiées, ici numériques (minimum, premier quartile, médiane, moyenne, troisième quartile et maximum).
 ```{r}
 summary(waters[sapply(waters, is.numeric)])
 ```
 
-<div style="text-align:justify">
 En moyenne, les eaux sont principalement concentrées en HCO3 (691.4 mg/L), Na (151.4 mg/L), Ca (111.1 mg/L) et SO4 (108.7 mg/L). Cependant, dans la mesure où un grand nombre de variables enregistrent des valeurs extrêmes telles HCO3 (maximum à 6722.2 mg/L) ou Na (maximum à 1945 mg/L), la médiane apparaît ici comme une meilleure mesure centrale, car plus robuste que la moyenne. Exception faites des variables HCO3 et Ca, on remarque que les concentrations oscillent alors entre 2 mg/L et 18 mg/L, tous composants minéraux confondus.
 </div>
 
@@ -124,7 +158,7 @@ curve(dnorm(x, mean=mean(waters$HCO3, na.rm=TRUE), sd=sd(waters$HCO3, na.rm=TRUE
 
 <br/>Avant de poursuivre notre analyse par une étude bidimensionnelle, il peut donc être pertinent de s’intéresser aux données suspectes (outliers) susceptibles d’être à l’origine de ces distorsions, afin de les corriger et/ou supprimer puisqu’elles influeront nécessairement sur les résultats obtenus en ACP.
 
-####<br/> 1.2.3 Analyse unidimensionnelle : variables quantitatives
+####<br/> 1.2.4 Recherche des valeurs extrêmes/outliers
 
 <div style="text-align:justify">
 Le repérage des données suspectes peut être mené via plusieurs méthodes. Le test de Grubbs est le test le plus courant, mais n’étant applicable que si la distribution de l’échantillon est Normale ou voisine de la Normale, il ne sera ici pas retenu.
@@ -142,12 +176,10 @@ La commande which permet d’identifier les indices des outliers :
 ```{r}
 which(waters$SO4 %in% boxplot.stats(waters$SO4)$out)
 ```
-
+  
 <div style="text-align:justify">
-Il peut être ici intéressant de générer un deuxième jeu de données sans ces extremas. Cela permettra de mieux apprécier l'impact des valeurs extrêmes sur les résultats obtenus, notamment au niveau des corrélations inter-variables. Passer ces données en observations supplémentaires dans le cadre de notre ACP permettra de neutraliser ces valeurs, de façon à ne pas biaiser notre étude.
+Les outliers sont donc très présents dans ce jeu de données. Il pourrait ainsi être judicieux de générer un deuxième jeu de données sans ces extremas, ou en tout cas essayer de s'en affranchir autant que faire se peut, de façon à ne pas biaiser la suite de notre étude. Passer ces données en observations supplémentaires dans le cadre de notre ACP est une façon de neutraliser ces valeurs.
 </div>
-
-####<br/> 1.2.4 Analyse unidimensionnelle : variables qualitatives
 
 ####<br/> 1.2.5 Analyse bidimensionnelle
 
@@ -170,8 +202,11 @@ round(cor(waters[sapply(waters, is.numeric)], use="complete.obs"),3)
 
 <div style="text-align:justify">
 Les variables les plus corrélées positivement sont les variables HCO3 et NA (0.910), Na et K (0.867) et HCO3 et K (0.883) : elles varient simultanément de façon semblable.<br/>
+  
 On remarque que le PH est corrélé négativement à toutes les autres variables, exception faite du composant S04. Le comportement de cette variable est donc, de façon générale, opposé à celui des autres variables.<br/>
-Il faut cependant rester vigilant quant aux résultats obtenus. En effet, la présence de valeurs extrêmes peut venir perturber notre analyse, ici portée sur l’étude des corrélations. En effet, le coefficient de corrélation de Pearson (méthode par défaut) est très sensible aux valeurs de données extrêmes. Il peut donc être intéressant de réitérer cette analyse sans prendre en compte cette fois-ci les données extrêmes/outliers enregistrés, soit en les supprimant, soit en transformant les variables pour rendre plus symétriques et moins étalées certaines distributions (en prenant les logarithmes par exemple). Comme nous avons déjà généré, lors de l’étape précédente, un nouveau jeu de données diminué des valeurs extrêmes enregistrées, nous mettrons en oeuvre ici la première option.
+Il faut cependant rester vigilant quant aux résultats obtenus. En effet, la présence de valeurs extrêmes peut venir perturber notre analyse, ici portée sur l’étude des corrélations. En effet, le coefficient de corrélation de Pearson (méthode par défaut) est très sensible aux valeurs de données extrêmes. Il peut donc être intéressant de réitérer cette analyse sans prendre en compte cette fois-ci les données extrêmes/outliers enregistrés, soit en les supprimant, soit en transformant les variables pour rendre plus symétriques et moins étalées certaines distributions (en prenant les logarithmes par exemple). 
+ 
+Comme nous avons déjà généré, lors de l’étape précédente, un nouveau jeu de données diminué des valeurs extrêmes enregistrées, nous mettrons en oeuvre ici la première option.
 </div>
 
 ## 2. Analyse multivariée
@@ -242,13 +277,13 @@ On remarque que :
 
 NB : On note que la variabilité des six dernières composantes principales est beaucoup plus faible que celle des composantes retenues. Autrement dit, la distance qu’elles traduisent entre les observations est négligeable.<br/>
 
-<br/>Le tracé du cercle des corrélations peut nous aider à apprécier ces corrélations, ainsi que la bonne représentation des différentes variables. Dans la mesure où l’on a décidé ici de retenir 3 axes, il faut alors tracer trois graphiques distincts pour chaque nuage : le nuage projeté sur le plan (axe1, axe2), celui projeté sur le plan (axe1, axe3) et enfin celui sur le plan (axe2, axe3).
+Le tracé du cercle des corrélations peut nous aider à apprécier ces corrélations, ainsi que la bonne représentation des différentes variables. Dans la mesure où l’on a décidé ici de retenir 3 axes, il faut alors tracer trois graphiques distincts pour chaque nuage : le nuage projeté sur le plan (axe1, axe2), celui projeté sur le plan (axe1, axe3) et enfin celui sur le plan (axe2, axe3).
 </div>
 
-```{r echo=FALSE}
-s.corcircle(auto.acp$co, xax=1, yax=2) # Cercle des corrélations dans le plan 1-2
-s.corcircle(auto.acp$co, xax=1, yax=3) # Cercle des corrélations dans le plan 1-3
-s.corcircle(auto.acp$co, xax=2, yax=3) # Cercle des corrélations dans le plan 2-3
+```{r echo=FALSE, out.width='49%'}
+s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Cercle des corrélations dans le plan 1-2")
+s.corcircle(auto.acp$co, xax=1, yax=3); mtext("Cercle des corrélations dans le plan 1-3")
+s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Cercle des corrélations dans le plan 2-3")
 ```
 <div style="text-align:justify">
 Le premier plan principal permet de distinguer 2 groupes de variables distincts, tels que décrits plus haut : Na, K, HCO3 et Cl d’une part, Mg, Ca et SO4 d’autre part. Les variables NO3 et PH sont assez mal représentées dans ce plan (éloignées du bord du cercle de corrélation), à la différence des plans 1-3 et 2-3 où leur représentation est bonne. L’existence de corrélations négatives entre ces deux variables est facilement visualisable dans ces configurations. La conservation des trois premiers axes est donc ici nécessaire si l’on ne souhaite pas aboutir à de mauvaises interprétations.
@@ -261,9 +296,8 @@ Le premier plan principal permet de distinguer 2 groupes de variables distincts,
 * Axe 3 : cet axe est lié aux concentrations en NO3. Il caractérise le pouvoir nitrique des eaux (acides ou non).
 
 ##### <br/><u><B>Analyse des observations</B></u>
-
 <div style="text-align:justify">
-<br/><u>Qualité de représentation des observations :</u>
+<u>Qualité de représentation des observations :</u>
 
 La commande `obs.inertie$row.re/100` permet d’apprécier la qualité de représentation des différents individus sur les différents axes.
 La qualité de représentation d’un individu dans un plan donné s’évalue en sommant les qualités de représentation de ce même individu sur les axes du plan donné.
@@ -290,13 +324,13 @@ L’ACP a donc permis de mettre en évidence des groupements de propriétés min
 En résumé, la contribution des individus aux différents axes (par ordre décroissant de contribution) est la suivante :
 
 Axe 1 : Arvie, Rozana, Parot, Vichy Celestins
+ 
 Axe 2 : Talians, Hepar, Courmayeur, Contrex
+ 
 Axe 3 :  Perrier, Thonon, Ste Marguerite, Badoit
-
 </div>
 
 ####<br/>2.1.3. Analyse des observations supplémentaires
-
 ```{r echo=FALSE}
 supp.waters <- waters[waters$Pays %in% "Maroc",] 
 supp.waters
@@ -305,7 +339,7 @@ supp.waters
 <div style="text-align:justify">
 Les observations supplémentaires sont des eaux provenant du Maroc, exclusivement plates. Parmi ces 11 observations supplémentaires, on remarque que 4 d’entre elles enregistrent des valeurs manquantes, notamment au niveau de leur PH. Dans la mesure où nous avons précédemment vu que la distribution du PH s’apparente à celle d’une loi normale, on peut raisonnablement substituer ces valeurs manquantes par la valeur médiane de cette variable, qui vaut ici 7.0. Cela évite ainsi d’éliminer un tiers des observations supplémentaires.<br/>
 
-Dans la mesure où, dans le cadre de ce premier jeu de données, nous n’avons pas réalisé d’estimation pour les données manquantes enregistrées au niveau de la variable Cl, nous avons ici pris le parti de supprimer l’observation Ain Soltane (échantillon 89).
+Etant donné que nous n’avons pas réalisé d’estimation pour les données manquantes enregistrées au niveau de la variable Cl (cf. deuxième jeu de données), nous avons ici pris le parti de supprimer l’observation Ain Soltane (échantillon 89).
 Ces individus supplémentaires (ici en rouge) ont été représentés dans chacun des plans 1-2, 1-3 et 2-3 :
 </div>
 
@@ -320,7 +354,7 @@ csup1 <- ligsup$lisup[,1]
 csup2 <- ligsup$lisup[,2]
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.align='center'}
 plot(cl1, cl2, type="n", main="Individus actifs et supplémentaires dans le plan 1-2", xlim=c(-2,2))
 abline(h=0,v=0)
 text(cl1, cl2, row.names(auto.acp$li),)
