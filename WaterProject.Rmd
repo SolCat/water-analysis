@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-L'eau est un élément central et essentiel dans notre vie quotidienne. 
+L'eau est un élément central dans notre vie quotidienne. 
 
 ## 1. Analyse univariée et bivariée
 ###1.1 Etude du jeu de données
@@ -144,7 +144,7 @@ Le tracé de la boîte à moustache de cette variable révèle la présence de n
 Les variables Cl, K, SO4 et HCO3 témoignent d’une distribution à nouveau non symétrique, peu homogène, enregistrant un grand nombre de valeurs extrêmes. Le tracé de leur densité de probabilité s’éloigne ici d’une loi normale. 
 </div>
 
-```{r echo=FALSE, out.width="8", fig.align='center'}
+```{r echo=FALSE, fig.height=8, fig.width=10, out.width="100%", fig.align='center'}
 par(mfrow=c(2,2))
 hist(waters$Cl, prob=TRUE, main="Histogramme et densité de probabilité du Cl", xlab="Cl")
 curve(dnorm(x, mean=mean(waters$Cl, na.rm=TRUE), sd=sd(waters$Cl, na.rm=TRUE)), add=TRUE, col="red")
@@ -201,12 +201,12 @@ round(cor(waters[sapply(waters, is.numeric)], use="complete.obs"),3)
 ```
 
 <div style="text-align:justify">
-Les variables les plus corrélées positivement sont les variables HCO3 et NA (0.910), Na et K (0.867) et HCO3 et K (0.883) : elles varient simultanément de façon semblable.<br/>
+
+Les variables les plus corrélées positivement sont les variables HCO3 et NA (0.910), Na et K (0.867) et HCO3 et K (0.883) : elles varient simultanément de façon semblable.  
   
-On remarque que le PH est corrélé négativement à toutes les autres variables, exception faite du composant S04. Le comportement de cette variable est donc, de façon générale, opposé à celui des autres variables.<br/>
-Il faut cependant rester vigilant quant aux résultats obtenus. En effet, la présence de valeurs extrêmes peut venir perturber notre analyse, ici portée sur l’étude des corrélations. En effet, le coefficient de corrélation de Pearson (méthode par défaut) est très sensible aux valeurs de données extrêmes. Il peut donc être intéressant de réitérer cette analyse sans prendre en compte cette fois-ci les données extrêmes/outliers enregistrés, soit en les supprimant, soit en transformant les variables pour rendre plus symétriques et moins étalées certaines distributions (en prenant les logarithmes par exemple). 
- 
-Comme nous avons déjà généré, lors de l’étape précédente, un nouveau jeu de données diminué des valeurs extrêmes enregistrées, nous mettrons en oeuvre ici la première option.
+On remarque que le PH est corrélé négativement à toutes les autres variables, exception faite du composant S04. Le comportement de cette variable est donc, de façon générale, opposé à celui des autres variables.  
+  
+Il faut cependant rester vigilant quant aux résultats obtenus. En effet, la présence de valeurs extrêmes peut venir perturber notre analyse, ici portée sur l’étude des corrélations. En effet, le coefficient de corrélation de Pearson (méthode par défaut) est très sensible aux valeurs de données extrêmes. Il peut donc être intéressant de réitérer cette analyse sans prendre en compte cette fois-ci les données extrêmes/outliers enregistrés, soit en les supprimant, soit en transformant les variables pour rendre plus symétriques et moins étalées certaines distributions (en prenant les logarithmes par exemple). Comme nous avons déjà généré, lors de l’étape précédente, un nouveau jeu de données diminué des valeurs extrêmes enregistrées, nous mettrons en oeuvre ici la première option.
 </div>
 
 ## 2. Analyse multivariée
@@ -235,7 +235,7 @@ On note que 33 observations ont ainsi été retirés du jeu de données initial.
 
 De plus, dans la mesure où l’on souhaite ici que les eaux marocaines soient traitées comme des observations supplémentaires et non pas actives, il faut veiller à les retirer au préalable. Une fois ce traitement réalisé, le jeu de données à traiter ne comporte alors plus que 55 lignes.
 
-Avant de débuter l’ACP à proprement parler, il convient de faire un choix de métrique. Dans la mesure où la variable PH ne s’exprime pas dans la même unité que les autres variables (concentrations en mg/L), on préfèrera ici mettre en oeuvre une ACP normée (ACPN). Éliminer la variable PH du jeu de données conduirait en effet à une perte d’information non négligeable.<br/>
+Avant de débuter l’ACP à proprement parler, il convient de faire un choix de métrique. Dans la mesure où la variable PH ne s’exprime pas dans la même unité que les autres variables (concentrations en mg/L), on préfèrera ici mettre en oeuvre une ACP normée (ACPN). Éliminer la variable PH du jeu de données conduirait en effet à une perte d’information non négligeable. De plus, étant donné que les variances des différentes variables ne sont pas semblables, une ACP non normée n'est ici pas judicieuse.<br/>
 </div>
 
 ####<br/> 2.1.1 Sélection des axes et plans retenus
@@ -287,7 +287,8 @@ s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Cercle des corrélations dans le 
 ```
 <div style="text-align:justify">
 Le premier plan principal permet de distinguer 2 groupes de variables distincts, tels que décrits plus haut : Na, K, HCO3 et Cl d’une part, Mg, Ca et SO4 d’autre part. Les variables NO3 et PH sont assez mal représentées dans ce plan (éloignées du bord du cercle de corrélation), à la différence des plans 1-3 et 2-3 où leur représentation est bonne. L’existence de corrélations négatives entre ces deux variables est facilement visualisable dans ces configurations. La conservation des trois premiers axes est donc ici nécessaire si l’on ne souhaite pas aboutir à de mauvaises interprétations.
-</div>
+
+Les cercles de corrélation obtenues via notre ACP, identiques à ceux présentés plus haut, sont disponibles en annexe de ce rapport.
 
 <br/><u>Interprétation des axes :</u>
 
@@ -295,6 +296,7 @@ Le premier plan principal permet de distinguer 2 groupes de variables distincts,
 * Axe 2 : cet axe est lié aux concentrations en Ca, Mg et SO4. Il caractérise la teneur minérale des eaux (fortement minéralisées ou non) ;
 * Axe 3 : cet axe est lié aux concentrations en NO3. Il caractérise le pouvoir nitrique des eaux (acides ou non).
 
+</div>
 ##### <br/><u><B>Analyse des observations</B></u>
 <div style="text-align:justify">
 <u>Qualité de représentation des observations :</u>
@@ -334,10 +336,13 @@ Axe 3 :  Perrier, Thonon, Ste Marguerite, Badoit
 ```{r echo=FALSE}
 supp.waters <- waters[waters$Pays %in% "Maroc",] 
 supp.waters
+summary(supp.waters)
 ```
 
 <div style="text-align:justify">
-Les observations supplémentaires sont des eaux provenant du Maroc, exclusivement plates. Parmi ces 11 observations supplémentaires, on remarque que 4 d’entre elles enregistrent des valeurs manquantes, notamment au niveau de leur PH. Dans la mesure où nous avons précédemment vu que la distribution du PH s’apparente à celle d’une loi normale, on peut raisonnablement substituer ces valeurs manquantes par la valeur médiane de cette variable, qui vaut ici 7.0. Cela évite ainsi d’éliminer un tiers des observations supplémentaires.<br/>
+Les observations supplémentaires sont des eaux provenant du Maroc, exclusivement plates. Comparativement aux eaux françaises, les eaux marocaines sont beaucoup plus riches en Na.
+
+Parmi ces 11 observations supplémentaires, 4 enregistrent des valeurs manquantes, notamment au niveau de leur PH. Dans la mesure où nous avons précédemment vu que la distribution du PH s’apparente à celle d’une loi normale, on peut raisonnablement substituer ces valeurs manquantes par la valeur médiane de cette variable, qui vaut ici 7.0. Cela évite ainsi d’éliminer un tiers des observations supplémentaires.<br/>
 
 Etant donné que nous n’avons pas réalisé d’estimation pour les données manquantes enregistrées au niveau de la variable Cl (cf. deuxième jeu de données), nous avons ici pris le parti de supprimer l’observation Ain Soltane (échantillon 89).
 Ces individus supplémentaires (ici en rouge) ont été représentés dans chacun des plans 1-2, 1-3 et 2-3 :
@@ -349,12 +354,11 @@ cl1 <- auto.acp$li[,1]
 cl2 <- auto.acp$li[,2]
 cl3 <- auto.acp$li[,3]
 ligsup <- suprow(auto.acp,new.supp.waters[3:11])
-ligsup$lisup # =Coordonnées des individus supplémentaires
 csup1 <- ligsup$lisup[,1]
 csup2 <- ligsup$lisup[,2]
 ```
 
-```{r echo=FALSE, fig.align='center'}
+```{r echo=FALSE, out.width="49%", fig.align='center'}
 plot(cl1, cl2, type="n", main="Individus actifs et supplémentaires dans le plan 1-2", xlim=c(-2,2))
 abline(h=0,v=0)
 text(cl1, cl2, row.names(auto.acp$li),)
@@ -372,14 +376,27 @@ text(cl2, cl3, row.names(auto.acp$li),)
 text(csup2, csup3, row.names(ligsup$lisup), col="red", cex=1.2)
 ```
 
+Interprétation :
+
 ##<br/>2.2. ACP sur le deuxième jeu de données
 
 <div style="text-align:justify">
-Nous considérons ici un deuxième jeu de données où les valeurs manquantes ne sont plus supprimées mais substituées/imputées par des valeurs approximatives
+Nous considérons ici un deuxième jeu de données où les valeurs manquantes ne sont plus supprimées mais substituées/imputées par des valeurs approximatives.
 
 Pour ce faire, on peut utiliser l’algorithme des k plus proches voisins, déjà implémenté au sein du package DMwR. Pour chaque valeur manquante, l’algorithme identifie les k observations les plus proches en terme de distance euclidienne et en calcule la moyenne pondérée.
 
-La fonction knnImputation permet de générer un nouveau jeu de données suivant cette méthode.
+La fonction `knnImputation` permet de générer un nouveau jeu de données suivant cette méthode. En voici un aperçu :
+
+```{r echo=FALSE}
+library(DMwR)
+new.waters <- knnImputation(waters, k=10, scale=T, meth="weighAvg", distData=NULL) # On fixe k à 10 voisins
+new.active.waters <- new.waters[new.waters$Pays %in% "France",]
+head(new.active.waters)
+```
+
+On remarque par exemple que l'eau <em>Aquarelle</em>, originellement incomplète, a ici été imputée au niveau des variables K, Cl, SO4 et PH par les valeurs 1.01, 7.19, 20.67 et 7.12.
+
+Nous pouvons désormais appliquer notre ACP sur ce nouveau jeu de données.
 
 </div>
 
