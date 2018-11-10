@@ -250,7 +250,33 @@ Les variables les plus corrélées positivement sont les variables HCO3 et NA (0
   
 On remarque que le PH est corrélé négativement à toutes les autres variables, exception faite du composant S04. Le comportement de cette variable est donc, de façon générale, opposé à celui des autres variables.  
   
-Il faut cependant rester vigilant quant aux résultats obtenus. En effet, la présence de valeurs extrêmes peut venir perturber notre analyse, ici portée sur l’étude des corrélations. En effet, le coefficient de corrélation de Pearson (méthode par défaut) est très sensible aux valeurs de données extrêmes. Il peut donc être intéressant de réitérer cette analyse sans prendre en compte cette fois-ci les données extrêmes/outliers enregistrés, soit en les supprimant, soit en transformant les variables pour rendre plus symétriques et moins étalées certaines distributions (en prenant les logarithmes par exemple). Comme nous avons déjà généré, lors de l’étape précédente, un nouveau jeu de données diminué des valeurs extrêmes enregistrées, nous mettrons en oeuvre ici la première option.
+Il faut cependant rester vigilant quant aux résultats obtenus. En effet, la présence de valeurs extrêmes peut venir perturber notre analyse, ici portée sur l’étude des corrélations. En effet, le coefficient de corrélation de Pearson (méthode par défaut) est très sensible aux valeurs de données extrêmes. Il peut donc être intéressant de réitérer cette analyse sans prendre en compte cette fois-ci les données extrêmes/outliers enregistrés, soit en les supprimant, soit en transformant les variables pour rendre plus symétriques et moins étalées certaines distributions (en prenant les logarithmes par exemple). Nous mettrons en oeuvre ici la première option :
+
+```{r echo=FALSE}
+library(plotrix)
+library(ade4)
+
+acpn = function(data_in, round_precision = 3){  
+  result = list()
+  
+  result$source = data_in
+  #Filtre
+  result$raw_data = na.omit(data_in[sapply(data_in, is.numeric)])
+  result$matrix = as.matrix(result$raw_data, rownames.force = NA)
+  
+  #Retour
+  return(result)
+}
+waters <- read.table("./Eaux2018 FM.txt", header=TRUE, sep="\t")
+active.waters <- waters[waters$Pays %in% "France",] 
+supp.waters <- waters[waters$Pays %in% "Maroc",] 
+acp_waters = acpn(active.waters)
+round(cor(acp_waters$matrix[setdiff(c(1:nrow(acp_waters$matrix)), unique(unlist(apply(acp_waters$matrix, 2, function(x){which(x %in% boxplot.stats(x)$out)})))),]),3)
+```
+
+L'élimination des outliers du jeu de données laisse apparaître de nouvelles corrélations, en particulier au niveau de la variable HCO3.
+
+
 </div>
 
 ##2. Analyse multivariée
