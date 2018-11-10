@@ -14,7 +14,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-L'eau est un élément central dans notre vie quotidienne. 
+Gazeuse, dé-ionisée ou encore riche en magnésium, l'eau, élément naturel et central dans notre vie quotidienne, peut revêtir plusieurs formes. Sa composition minérale, sa provenance, sa nature mais aussi son potentiel hydrogène sont autant de paramètres qui entrent en jeu dans sa caractérisation. Analyser une eau revient donc à s'intéresser à l'ensemble des paramètres et propriétés susceptibles de la définir.
+
+Le jeu de données dont nous disposons recense près de 80 eaux (83 exactement), déclinées sous 12 variables à la fois qualitatives (nom, nature, pays) et quantitatives (composition ionique, sodique, etc.). L'intérêt d'une ACP est, entre autres, de caractériser des observations dites "multivariées", c'est-à-dire multidimensionnelles, et d'en dégager des relations de ressemblance/dissemblance. En d'autres termes, l'ACP permet d'avoir une vue globale et synthétique des données : c'est la raison pour laquelle son usage est ici parfaitement approprié. 
+
+Avant de procéder à l'ACP en tant que telle, nous explorerons le jeu de données au travers d'analyses univariées et bivariées. Une classification de type non-supervisée sera menée en dernier lieu, via la méthode des K-means.
 
 ## 1. Analyse univariée et bivariée
 ###1.1 Etude du jeu de données
