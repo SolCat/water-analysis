@@ -12,3 +12,18 @@ path {
   fill: #ecf0f1;
   stroke-width: 1;
 }
+
+#tooltip{
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  text-align: center;
+  width: 80px;
+  height: 30px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: white;
+  border: 0px;
+  border-radius: 3px;
+  pointer-events: none;
+}
