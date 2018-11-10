@@ -1,6 +1,6 @@
 
 ---
-title: 'Projet - Etude des Eaux '
+title: 'Projet - ACP sur des Eaux '
 author: "Solène Catella, Hugo Le Baher"
 date: "23 novembre 2018"
 output:
@@ -12,13 +12,50 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+##Sommaire
+
+[Introduction]
+
+[1. Analyse univariée et bivariée]
+
+[1.1 Etude du jeu de données]
+
+[1.2 Analyse exloratoire des données]
+
+[1.2.1 Recherche des données manquantes]
+
+[1.2.2 Analyse unidimensionnelle : variables qualitatives]
+
+[1.2.3 Analyse unidimensionnelle : variables quantitatives]
+
+[1.2.4 Recherche des valeurs extrêmes/outliers]
+
+[1.2.5 Analyse bidimensionnelle]
+
+[2. Analyse multivariée]
+
+[2.1 ACP sur le premier jeu de données]
+
+[2.1.1 Sélection des axes et plans retenus]
+
+[2.1.2 Projection des variables et observations dans un plan donné]
+
+[2.1.3 Analyse des observations supplémentaires]
+
+[2.2 ACP sur le deuxième jeu de données]
+
+[2.4 Classification non supervisée de type k-means]
+
 ## Introduction
 
+<div style="text-align:justify">
 Gazeuse, dé-ionisée ou encore riche en magnésium, l'eau, élément naturel et central dans notre vie quotidienne, peut revêtir plusieurs formes. Sa composition minérale, sa provenance, sa nature mais aussi son potentiel hydrogène sont autant de paramètres qui entrent en jeu dans sa caractérisation. Analyser une eau revient donc à s'intéresser à l'ensemble des paramètres et propriétés susceptibles de la définir.
 
 Le jeu de données dont nous disposons recense près de 80 eaux (83 exactement), déclinées sous 12 variables à la fois qualitatives (nom, nature, pays) et quantitatives (composition ionique, sodique, etc.). L'intérêt d'une ACP est, entre autres, de caractériser des observations dites "multivariées", c'est-à-dire multidimensionnelles, et d'en dégager des relations de ressemblance/dissemblance. En d'autres termes, l'ACP permet d'avoir une vue globale et synthétique des données : c'est la raison pour laquelle son usage est ici parfaitement approprié. 
 
 Avant de procéder à l'ACP en tant que telle, nous explorerons le jeu de données au travers d'analyses univariées et bivariées. Une classification de type non-supervisée sera menée en dernier lieu, via la méthode des K-means.
+</div>
 
 ## 1. Analyse univariée et bivariée
 ###1.1 Etude du jeu de données
@@ -57,9 +94,9 @@ Parmi les variables étudiées, on remarque que le NO3 et le PH sont celles qui 
 * Imputées par une valeur plausible ou aléatoire (méthodes d’imputation simples et multiples).
 
 L’étude statistique unidimensionnelle peut nous aider à mieux appréhender la distribution des différentes variables, et préférer l’une ou l’autre de ces méthodes. Dans la mesure où l’Analyse en Composantes Principales (ACP) est une méthode appliquée à des variables quantitatives continues, nous nous intéresserons particulièrement à ces dernières, après avoir brièvement analyser les variables qualitatives.
-</div>
-
-####<br/> 1.2.2 Analyse unidimensionnelle : variables qualitatives
+</div>  
+  
+####1.2.2 Analyse unidimensionnelle : variables qualitatives
 
 Le jeu de données comprend 3 variables qualitatives : le nom de l'eau (Nom), sa nature (Nature) et son origine (Pays).
 
@@ -89,9 +126,10 @@ table(waters$Nature, waters$Pays)
 mosaicplot(~waters$Pays+waters$Nature, data=waters, main="Répartition des eaux par Nature et Pays", color=TRUE)
 ```
 
-On remarque que les eaux plates sont en quantité supérieure, représentant à peu près 2/3 du jeu de données. Les eaux gazeuses sont exclusivement françaises : il n'y a pas d'eaux marocaines gazeuses. On peut aussi relever que les eaux marocaines sont très peu représentées vis-à-vis des eaux françaises, raison pour laquelle elles sont sans doute traitées dans cette analyse comme des observations supplémentaires.
+On remarque que les eaux plates sont en quantité supérieure, représentant à peu près 2/3 du jeu de données. Les eaux gazeuses sont exclusivement françaises : il n'y a pas d'eaux marocaines gazeuses. On peut aussi relever que les eaux marocaines sont très peu représentées vis-à-vis des eaux françaises, raison pour laquelle elles sont sans doute traitées dans cette analyse comme des observations supplémentaires.<br/>
 
-####<br/> 1.2.3 Analyse unidimensionnelle : variables quantitatives
+
+####1.2.3 Analyse unidimensionnelle : variables quantitatives
 
 <div style="text-align:justify">
 Nous nous intéressons désormais aux variables quantitatives.
@@ -146,7 +184,6 @@ Le tracé de la boîte à moustache de cette variable révèle la présence de n
 
 <div style="text-align:justify">
 Les variables Cl, K, SO4 et HCO3 témoignent d’une distribution à nouveau non symétrique, peu homogène, enregistrant un grand nombre de valeurs extrêmes. Le tracé de leur densité de probabilité s’éloigne ici d’une loi normale. 
-</div>
 
 ```{r echo=FALSE, fig.height=8, fig.width=10, out.width="100%", fig.align='center'}
 par(mfrow=c(2,2))
@@ -161,8 +198,10 @@ curve(dnorm(x, mean=mean(waters$HCO3, na.rm=TRUE), sd=sd(waters$HCO3, na.rm=TRUE
 ```
 
 <br/>Avant de poursuivre notre analyse par une étude bidimensionnelle, il peut donc être pertinent de s’intéresser aux données suspectes (outliers) susceptibles d’être à l’origine de ces distorsions, afin de les corriger et/ou supprimer puisqu’elles influeront nécessairement sur les résultats obtenus en ACP.
+</div>
 
-####<br/> 1.2.4 Recherche des valeurs extrêmes/outliers
+
+####1.2.4 Recherche des valeurs extrêmes/outliers
 
 <div style="text-align:justify">
 Le repérage des données suspectes peut être mené via plusieurs méthodes. Le test de Grubbs est le test le plus courant, mais n’étant applicable que si la distribution de l’échantillon est Normale ou voisine de la Normale, il ne sera ici pas retenu.
@@ -185,7 +224,8 @@ which(waters$SO4 %in% boxplot.stats(waters$SO4)$out)
 Les outliers sont donc très présents dans ce jeu de données. Il pourrait ainsi être judicieux de générer un deuxième jeu de données sans ces extremas, ou en tout cas essayer de s'en affranchir autant que faire se peut, de façon à ne pas biaiser la suite de notre étude. Passer ces données en observations supplémentaires dans le cadre de notre ACP est une façon de neutraliser ces valeurs.
 </div>
 
-####<br/> 1.2.5 Analyse bidimensionnelle
+ 
+####1.2.5 Analyse bidimensionnelle
 
 <div style="text-align:justify">
 L’objectif ici est de pouvoir mettre en évidence, pour chaque paire de variables considérée, l’existence de variations simultanées, aussi appelées liaisons. 
@@ -213,7 +253,7 @@ On remarque que le PH est corrélé négativement à toutes les autres variables
 Il faut cependant rester vigilant quant aux résultats obtenus. En effet, la présence de valeurs extrêmes peut venir perturber notre analyse, ici portée sur l’étude des corrélations. En effet, le coefficient de corrélation de Pearson (méthode par défaut) est très sensible aux valeurs de données extrêmes. Il peut donc être intéressant de réitérer cette analyse sans prendre en compte cette fois-ci les données extrêmes/outliers enregistrés, soit en les supprimant, soit en transformant les variables pour rendre plus symétriques et moins étalées certaines distributions (en prenant les logarithmes par exemple). Comme nous avons déjà généré, lors de l’étape précédente, un nouveau jeu de données diminué des valeurs extrêmes enregistrées, nous mettrons en oeuvre ici la première option.
 </div>
 
-## 2. Analyse multivariée
+##2. Analyse multivariée
 
 <div style="text-align:justify">
 Deux jeux de données seront ici considérés :
@@ -224,7 +264,7 @@ Deux jeux de données seront ici considérés :
 Il s’agira donc de travailler sur les données brutes d’abord (1), puis sur un jeu de données transformé ensuite (2). Dans la mesure où les résultats d’une ACP peuvent être biaisés par la présence de données suspectes et que celles-ci sont ici nombreuses, une troisième ACP, où seront passés en individus supplémentaires l’ensemble des données suspectes, sera réalisée. À noter qu’il aurait également été envisageable de neutraliser ces données à l’aide d’une ACP sur les rangs, plus robuste qu’une ACP classique.
 </div>
 
-###2.1. ACP sur le premier jeu de données
+###2.1 ACP sur le premier jeu de données
 
 <div style="text-align:justify">
 Nous considérons ici le jeu de données brutes, diminué des données manquantes. <br/>
@@ -242,7 +282,7 @@ De plus, dans la mesure où l’on souhaite ici que les eaux marocaines soient t
 Avant de débuter l’ACP à proprement parler, il convient de faire un choix de métrique. Dans la mesure où la variable PH ne s’exprime pas dans la même unité que les autres variables (concentrations en mg/L), on préfèrera ici mettre en oeuvre une ACP normée (ACPN). Éliminer la variable PH du jeu de données conduirait en effet à une perte d’information non négligeable. De plus, étant donné que les variances des différentes variables ne sont pas semblables, une ACP non normée n'est ici pas judicieuse.<br/>
 </div>
 
-####<br/> 2.1.1 Sélection des axes et plans retenus
+####2.1.1 Sélection des axes et plans retenus
 
 L’ACPN est effectué par un appel à la procédure `dudi.pca`.
 
@@ -263,10 +303,11 @@ Dans le cadre d’une ACP normée, on peut utiliser le critère de Kaiser selon 
 round(cumsum(100*auto.acp$eig/sum(auto.acp$eig)), 3)
 ```
 Cumulées, elles représentent alors plus de 82.02% de la variabilité totale. On ne conservera donc ici que les trois premiers axes.
+<br/>  
 
-####<br/> 2.1.2. Projection des variables et observations dans un plan donné
+####2.1.2 Projection des variables et observations dans un plan donné
 
-##### <br/><u><B>Analyse des variables</B></u>
+#####<br/><u><B>Analyse des variables</B></u>
 
 ```{r}
 round(auto.acp$co,3)
@@ -294,7 +335,7 @@ Le premier plan principal permet de distinguer 2 groupes de variables distincts,
 
 Les cercles de corrélation obtenues via notre ACP, identiques à ceux présentés plus haut, sont disponibles en annexe de ce rapport.
 
-<br/><u>Interprétation des axes :</u>
+<u>Interprétation des axes :</u>
 
 * Axe 1 : cet axe est lié aux concentrations en Na, K, Cl et HCO3. Il caractérise la teneur sodique des eaux (riches en sodium ou non) ;
 * Axe 2 : cet axe est lié aux concentrations en Ca, Mg et SO4. Il caractérise la teneur minérale des eaux (fortement minéralisées ou non) ;
@@ -333,10 +374,9 @@ Axe 1 : Arvie, Rozana, Parot, Vichy Celestins
  
 Axe 2 : Talians, Hepar, Courmayeur, Contrex
  
-Axe 3 :  Perrier, Thonon, Ste Marguerite, Badoit
-</div>
+Axe 3 :  Perrier, Thonon, Ste Marguerite, Badoit</div><br/>
 
-####<br/>2.1.3. Analyse des observations supplémentaires
+####2.1.3 Analyse des observations supplémentaires
 ```{r echo=FALSE}
 supp.waters <- waters[waters$Pays %in% "Maroc",] 
 supp.waters
@@ -382,7 +422,7 @@ text(csup2, csup3, row.names(ligsup$lisup), col="red", cex=1.2)
 
 Interprétation :
 
-##<br/>2.2. ACP sur le deuxième jeu de données
+##2.2 ACP sur le deuxième jeu de données
 
 <div style="text-align:justify">
 Nous considérons ici un deuxième jeu de données où les valeurs manquantes ne sont plus supprimées mais substituées/imputées par des valeurs approximatives.
@@ -404,4 +444,4 @@ Nous pouvons désormais appliquer notre ACP sur ce nouveau jeu de données.
 
 </div>
 
-##<br/>2.4. Classification non supervisée de type k-means
+##2.4 Classification non supervisée de type k-means
