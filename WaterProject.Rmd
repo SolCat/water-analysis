@@ -632,4 +632,24 @@ Nous pouvons désormais appliquer notre ACP sur ce nouveau jeu de données.
 
 </div>
 
+<<<<<<< HEAD
 ##2.4 Classification non supervisée de type k-means
+=======
+##<br/>2.4. Classification non supervisée de type k-means
+
+Pour approfondir notre analyse, on peut choisir de classer nos individus par catégories, par classes. Ainsi, on pourrait voir apparaître différents types d'eau dans nos données.  
+  
+Plusieurs méthodes s'offrent à nous. Cependant, nous n'avons pas vraiment de types d'eaux prédéfinis, ni de données d'entrainement sur lesquelles on pourrait s'appuyer. Le choix d'une méthode de partitionnement non supervisé semble donc raisonnable.  
+  
+La fonction kmeans(data, k) déjà implémentée remplit ce rôle de manière satisfasante. À partir des données d'entrée et d'un nombre de classes k, l'algorithme va alors regrouper les individus selon les distances des uns par rapport aux autres, jusqu'à trouver les distances minimales.
+  
+Même si l'algorithme est déjà implémenté, il nous faut quand même trouver un k optimal. En effet ce choix est primordial. Si on prend un k trop petit on risque d'avoir des classes peu représentatives, assez arbitraires. Cependant si on prend un k trop grand, on peut avoir des classes qui ne s'appliquent qu'à notre jeu de données ou alors avoir beaucoup de classes mais avec très peu d'individus.  
+  
+Un nombre classique de classes est $\sqrt{2/n}$, notre n étant le nombre d'individus c'est à dire 63 après avoir filtré les données, un k optimal s'approcherait de 6. On va confirmer cette hypothèse avec la méthode suivante :  
+  
+Quand on applique l'algorithme, il nous renvoie la somme des carrées des distances entre les individus et le centre des classes. Une part plus petite par rapport à la somme de toutes les distances étant meilleure, on peut dessiner le graphique de cette part, en fonction de k. En observant les décrochages de la courbe, on peut alors décider d'un k satisfaisant.  
+  
+Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire, on préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
+
+L'algorithme nous revoie donc un tableau des individus avec un numéros de classe associé. On peut donc, pour se donner une idée, appliquer ce tableau à une représentation en deux ou trois dimensions issue de l'ACP.
+>>>>>>> eeac477994d5a8d3ca1b47a6743892a4a5f96938
