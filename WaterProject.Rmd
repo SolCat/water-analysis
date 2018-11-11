@@ -608,7 +608,7 @@ text(csup2, csup3, row.names(ligsup$lisup), col="red", cex=1.2)
 
 <U>Interprétation :</U>
 
-Avant de s'intéresser à l'analyse graphique des individus dans le plan, il est nécessaire de vérifier au préalable leur bonne qualité de représentation.
+
 
 ##2.2 ACP sur le deuxième jeu de données
 
