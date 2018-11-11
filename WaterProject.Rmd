@@ -558,57 +558,77 @@ legend(x = "bottomright",legend=unique(water_type),col=1:length(water_type),pch=
 
 ```
 
-On remarque que c'est dans le plan 1-2 que la séparation entre eaux plates et gazeuses est la meilleure. Or, nous avons précédemment déduit que l'axe 1 était associé aux concentrations en Na, K, Cl et HCO3 d'une part, et que les composants minéraux qui semblaient être les plus discriminants dans la distinction des eaux plates et gazeuses étaient le HCO3 et le Na d'autre part. L'analyse est donc concordante avec le graphique, et les résultats de notre ACP.
+On remarque que c'est dans le plan 1-2 que la séparation entre eaux plates et gazeuses est la meilleure. Or, nous avons précédemment déduit que l'axe 1 était associé aux concentrations en Na, K, Cl et HCO3 d'une part, et que les composants minéraux qui semblaient être les plus discriminants dans la distinction des eaux plates et gazeuses étaient le HCO3 et le Na d'autre part. L'analyse graphique est donc concordante avec les résultats de notre ACP.
 
-</div><br/>
+</div>
 
 ####2.1.3 Analyse des observations supplémentaires
+
+<div style="text-align:justify">
+Les observations supplémentaires sont des eaux provenant du Maroc, exclusivement plates. Comparativement aux eaux françaises, les eaux marocaines sont beaucoup plus riches en Na.
+
 ```{r echo=FALSE}
 supp.waters <- waters[waters$Pays %in% "Maroc",] 
 supp.waters
 summary(supp.waters)
 ```
 
-<div style="text-align:justify">
-Les observations supplémentaires sont des eaux provenant du Maroc, exclusivement plates. Comparativement aux eaux françaises, les eaux marocaines sont beaucoup plus riches en Na.
-
 Parmi ces 11 observations supplémentaires, 4 enregistrent des valeurs manquantes, notamment au niveau de leur PH. Dans la mesure où nous avons précédemment vu que la distribution du PH s’apparente à celle d’une loi normale, on peut raisonnablement substituer ces valeurs manquantes par la valeur médiane de cette variable, qui vaut ici 7.0. Cela évite ainsi d’éliminer un tiers des observations supplémentaires.<br/>
 
 Etant donné que nous n’avons pas réalisé d’estimation pour les données manquantes enregistrées au niveau de la variable Cl (cf. deuxième jeu de données), nous avons ici pris le parti de supprimer l’observation Ain Soltane (échantillon 89).
-Ces individus supplémentaires (ici en rouge) ont été représentés dans chacun des plans 1-2, 1-3 et 2-3 :
+Ces individus supplémentaires (ici en rouge) ont été représentés dans chacun des plans 1-2, 1-3 et 2-3.
+
+Les cercles de corrélations ont été ici ajoutés une nouvelle fois de façon à plus facilement superposer les résultats d'analyse.
 </div>
 
 ```{r echo=FALSE}
 new.supp.waters <- na.omit(supp.waters)
-cl1 <- auto.acp$li[,1]
-cl2 <- auto.acp$li[,2]
-cl3 <- auto.acp$li[,3]
-ligsup <- suprow(auto.acp,new.supp.waters[3:11])
-csup1 <- ligsup$lisup[,1]
-csup2 <- ligsup$lisup[,2]
+axe1 <- auto.acp$li[,1]
+axe2 <- auto.acp$li[,2]
+axe3 <- auto.acp$li[,3]
 ```
 
+La qualité de représentation des individus supplémentaires s'obtient à partir des commandes suivantes :
+
+```{r}
+ligsup <- suprow(auto.acp,new.supp.waters[3:11])
+acpcos2sup <- ligsup$lisup^2/apply(ligsup$lisup^2, 1, sum)
+round(acpcos2sup[,1:3]*1000)
+```
+
+Seules les observations bien représentées peuvent être correctement analysées. L'observation #86 est, à titre d'exemple, très mal représentée, quel que soit le plan. Même chose pour l'observation #94 dans le plan 1-3. Nous nous focaliserons donc sur les autres observations.
+
 ```{r echo=FALSE, out.width="49%"}
-plot(cl1, cl2, type="n", main="Individus actifs et supplémentaires dans le plan 1-2", xlim=c(-2,2))
+csup1 <- ligsup$lisup[,1]
+csup2 <- ligsup$lisup[,2]
+plot(axe1, axe2, type="n", main="Individus actifs et supplémentaires dans le plan 1-2", xlim=c(-2,2))
 abline(h=0,v=0)
-text(cl1, cl2, row.names(auto.acp$li),)
+text(axe1, axe2, row.names(auto.acp$li),)
 text(csup1, csup2, row.names(ligsup$lisup), col="red", cex=1.2)
 # Graphe des observations actives et supplémentaires - plan 1-3
 csup3 <- ligsup$lisup[,3]
-plot(cl1, cl3, type="n", main="Individus actifs et supplémentaires dans le plan 1-3", xlim=c(-2,2))
+plot(axe1, axe3, type="n", main="Individus actifs et supplémentaires dans le plan 1-3", xlim=c(-2,2))
 abline(h=0,v=0)
-text(cl1, cl3, row.names(auto.acp$li),)
+text(axe1, axe3, row.names(auto.acp$li),)
 text(csup1, csup3, row.names(ligsup$lisup), col="red", cex=1.2)
 # Graphe des observations actives et supplémentaires - plan 2-3
-plot(cl2, cl3, type="n", main="Individus actifs et supplémentaires dans le plan 2-3", xlim=c(-2,2))
+plot(axe2, axe3, type="n", main="Individus actifs et supplémentaires dans le plan 2-3", xlim=c(-2,2))
 abline(h=0,v=0)
-text(cl2, cl3, row.names(auto.acp$li),)
+text(axe2, axe3, row.names(auto.acp$li),)
 text(csup2, csup3, row.names(ligsup$lisup), col="red", cex=1.2)
 ```
-
+```{r echo=FALSE, out.width='49%'}
+s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Cercle des corrélations dans le plan 1-2")
+s.corcircle(auto.acp$co, xax=1, yax=3); mtext("Cercle des corrélations dans le plan 1-3")
+s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Cercle des corrélations dans le plan 2-3")
+```
 <U>Interprétation :</U>
 
+On remarque que l'observation #88 (Oulmès) est une eau caractérisée par une forte concentration en HC03, Cl, K et Na. Cette eau se distingue des autres observations supplémentaires, isolée à la fois dans les plans 1-2 et 1-3. Si l'on jette un coup d'oeil au tableau d'analyse numérique inséré plus haut, on note en effet que qu'elle enregistre des concentrations beaucoup plus importantes que les autres eaux pour les variables ici considérées.
 
+Dans le plan 1-3, on distingue un groupe défini par les observations #95, #90, #91 et #87 : ces eaux sont comparativement plus concentrées en NO3 que les autres. 
+
+Dans le plan 2-3, c'est l'eau <em>Ciel</em> qui se distingue, enregistrant de fortes concentrations en Na, K et Cl.
 
 ##2.2 ACP sur le deuxième jeu de données
 
@@ -632,24 +652,23 @@ Nous pouvons désormais appliquer notre ACP sur ce nouveau jeu de données.
 
 </div>
 
-<<<<<<< HEAD
-##2.4 Classification non supervisée de type k-means
-=======
 ##<br/>2.4. Classification non supervisée de type k-means
 
+<div style="text-align:justify">
 Pour approfondir notre analyse, on peut choisir de classer nos individus par catégories, par classes. Ainsi, on pourrait voir apparaître différents types d'eau dans nos données.  
   
-Plusieurs méthodes s'offrent à nous. Cependant, nous n'avons pas vraiment de types d'eaux prédéfinis, ni de données d'entrainement sur lesquelles on pourrait s'appuyer. Le choix d'une méthode de partitionnement non supervisé semble donc raisonnable.  
+Plusieurs méthodes s'offrent à nous. Cependant, nous n'avons pas vraiment de types d'eaux prédéfinis, ni de données d'entrainement sur lesquelles on pourrait s'appuyer : le choix d'une méthode de partitionnement non supervisée semble donc raisonnable.  
   
-La fonction kmeans(data, k) déjà implémentée remplit ce rôle de manière satisfasante. À partir des données d'entrée et d'un nombre de classes k, l'algorithme va alors regrouper les individus selon les distances des uns par rapport aux autres, jusqu'à trouver les distances minimales.
+La fonction kmeans(data, k) déjà implémentée remplit ce rôle de manière satisfaisante. À partir des données d'entrée et d'un nombre de classes k, l'algorithme va alors regrouper les individus selon les distances des uns par rapport aux autres, jusqu'à trouver les distances minimales.
   
-Même si l'algorithme est déjà implémenté, il nous faut quand même trouver un k optimal. En effet ce choix est primordial. Si on prend un k trop petit on risque d'avoir des classes peu représentatives, assez arbitraires. Cependant si on prend un k trop grand, on peut avoir des classes qui ne s'appliquent qu'à notre jeu de données ou alors avoir beaucoup de classes mais avec très peu d'individus.  
+Même si l'algorithme est déjà implémenté, il nous faut quand même trouver un k optimal. En effet, ce choix est primordial. Si on prend un k trop petit, le risque est de se retrouver avec des classes peu représentatives, assez arbitraires. Cependant, si le k choisi est trop grand, on peut obtenir des classes qui ne s'appliquent qu'à notre jeu de données, ou alors avoir beaucoup de classes mais avec très peu d'individus.  
   
-Un nombre classique de classes est $\sqrt{2/n}$, notre n étant le nombre d'individus c'est à dire 63 après avoir filtré les données, un k optimal s'approcherait de 6. On va confirmer cette hypothèse avec la méthode suivante :  
+Un nombre classique de classes est $\sqrt{2/n}$, notre n étant le nombre d'individus (c'est-à-dire 63 après avoir filtré les données); un k optimal s'approcherait de 6. On va confirmer cette hypothèse avec la méthode suivante :  
   
 Quand on applique l'algorithme, il nous renvoie la somme des carrées des distances entre les individus et le centre des classes. Une part plus petite par rapport à la somme de toutes les distances étant meilleure, on peut dessiner le graphique de cette part, en fonction de k. En observant les décrochages de la courbe, on peut alors décider d'un k satisfaisant.  
   
 Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire, on préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
 
-L'algorithme nous revoie donc un tableau des individus avec un numéros de classe associé. On peut donc, pour se donner une idée, appliquer ce tableau à une représentation en deux ou trois dimensions issue de l'ACP.
->>>>>>> eeac477994d5a8d3ca1b47a6743892a4a5f96938
+L'algorithme nous revoie donc un tableau des individus avec un numéros de classe associé. On peut alors, pour se donner une idée, appliquer ce tableau à une représentation en deux ou trois dimensions issue de l'ACP.
+
+</div>
