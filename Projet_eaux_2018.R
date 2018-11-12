@@ -193,3 +193,6 @@ obs.qlt <- obs.inertie$row.re/100 # (Qualité des observations en %)
 #abs(round(obs.qlt,4)[1]+round(obs.qlt,4)[2])
 #abs(round(obs.qlt,4)[1])+abs(round(obs.qlt,4)[3])
 #abs(round(obs.qlt,4)[2])+abs(round(obs.qlt,4)[3])
+res <- which(is.na(active.waters), arr.ind = TRUE)
+for (i in res[,1]){
+  print(active.waters$Nom[i])}
