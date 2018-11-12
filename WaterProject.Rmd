@@ -724,7 +724,14 @@ sort(unique(which(is.na(active.waters), arr.ind = TRUE)[,1]))
 Les qualités sont résumées dans la table ci-contre :
 
 ```{r}
-round(obs.qlt[,1:3],3)
+round(obs.qlt[4:13,1:3],3)
+```
+
+```{r echo=FALSE}
+round(obs.qlt[30:50,1:3],3)
+```
+```{r echo=FALSE}
+round(obs.qlt[76,1:3],3)
 ```
 
 <B>Plan 1-2 :</B>
