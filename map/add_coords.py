@@ -13,15 +13,20 @@ if len(args)<3:
 
 classif = open(args[1], 'r')
 raw_json = classif.read()
+print()
 data = json.loads(raw_json)
 classif.close()
 
 for i in data:
-    print(i)
-    response = urllib2.urlopen('http://www.mapquestapi.com/geocoding/v1/address?key='+KEY+"&location="+urllib.quote_plus(data[i]["city"]+ ",France"))
+    city = raw_input(data[i]["nom"]+' location : ')
+    if city=="":
+        city=data[i]["nom"]
+    print(city)
+    response = urllib2.urlopen('http://www.mapquestapi.com/geocoding/v1/address?key='+KEY+"&location="+urllib.quote_plus(city))
     api_raw_result = response.read()
     result = json.loads(api_raw_result)
     data[i]["pos"] = result["results"][0]["locations"][0]["latLng"]
+    data[i]["city"] = city
 
 print(data)
 

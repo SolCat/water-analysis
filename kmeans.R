@@ -24,7 +24,7 @@ library(RJSONIO)
 
 out_l = list()
 for (k in names(classi$cluster)) {
-  out_l[[k]] = list("k"=classi$cluster[[k]], "city"=toString(waters$Nom[strtoi(k)]))
+  out_l[[k]] = list("k"=classi$cluster[[k]], "nom"=toString(waters$Nom[strtoi(k)]))
 }
 write(toJSON(out_l), file="./map/classif.json")
 

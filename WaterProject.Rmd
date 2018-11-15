@@ -414,6 +414,28 @@ Un nombre classique de classes est $\sqrt{2/n}$, notre n étant le nombre d'indi
   
 Quand on applique l'algorithme, il nous renvoie la somme des carrées des distances entre les individus et le centre des classes. Une part plus petite par rapport à la somme de toutes les distances étant meilleure, on peut dessiner le graphique de cette part, en fonction de k. En observant les décrochages de la courbe, on peut alors décider d'un k satisfaisant.  
   
-Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire, on préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
+```{r echo=FALSE, fig.align='center'}
+data = na.omit(waters[sapply(waters, is.numeric)])
 
-L'algorithme nous revoie donc un tableau des individus avec un numéros de classe associé. On peut donc, pour se donner une idée, appliquer ce tableau à une représentation en deux ou trois dimensions issue de l'ACP.
+set.seed(3)
+classi = kmeans(data, 5)
+
+values = sapply(2:10, function(k){
+  curr = kmeans(data, k)
+  curr$tot.withinss/curr$totss*100
+})
+
+plot(2:10,values, type="b", xlab="Nombre de clusters", ylab = "Part des distances entre individus et centre des classes", main="Qualité de la classification en fonction du nombre de classes")
+
+```
+  
+Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire, on préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
+  
+Grace au graphique, on peut remarquer qu'à k=5, la qualité de représentation ne progresse plus beaucoup. 5 semble donc être raisonnable. Une fois exectuté, l'algorithme nous revoie un tableau des individus classés. On peut donc, pour se donner une idée, appliquer ce tableau à une représentation en deux ou trois dimensions issue de l'ACP.
+
+```{r echo=FALSE, fig.align='center'}
+acp = dudi.pca(data, scannf = FALSE, nf=3)
+
+plot(acp$li[,1], acp$li[,2], xlab = "Axe 1", ylab = "Axe 2", type="n", main="Représentation des individus classés en deux dimensions")
+text(x=acp$li[,1], y=acp$li[,2], labels = row.names(acp$li), col=unname(classi$cluster))
+```

@@ -1,254 +1,254 @@
 {
  "1": {
  "k": 3,
-"city": "Abatilles" 
+"nom": "Abatilles" 
 },
 "2": {
  "k": 1,
-"city": "Aix-Les-Bains" 
+"nom": "Aix-Les-Bains"
 },
 "3": {
  "k": 1,
-"city": "Alet" 
+"nom": "Alet"
 },
 "10": {
  "k": 2,
-"city": "Arvie" 
+"nom": "Arvie"
 },
 "12": {
  "k": 4,
-"city": "Badoit" 
+"nom": "Badoit"
 },
 "14": {
  "k": 2,
-"city": "Cesar" 
+"nom": "Cesar"
 },
 "15": {
  "k": 2,
-"city": "Chateauneuf" 
+"nom": "Chateauneuf"
 },
 "16": {
  "k": 2,
-"city": "Chateldon" 
+"nom": "Chateldon"
 },
 "19": {
  "k": 5,
-"city": "Contrex" 
+"nom": "Contrex"
 },
 "20": {
  "k": 5,
-"city": "Courmayeur" 
+"nom": "Courmayeur"
 },
 "21": {
  "k": 1,
-"city": "Christalline Alizee" 
+"nom": "Christalline Alizee"
 },
 "22": {
  "k": 1,
-"city": "Christalline Aurelie" 
+"nom": "Christalline Aurelie"
 },
 "23": {
  "k": 3,
-"city": "Christalline Doye" 
+"nom": "Christalline Doye"
 },
 "24": {
  "k": 1,
-"city": "Christalline Gds Bois" 
+"nom": "Christalline Gds Bois"
 },
 "28": {
  "k": 1,
-"city": "Christalline Ste Cecile" 
+"nom": "Christalline Ste Cecile"
 },
 "29": {
  "k": 1,
-"city": "Christalline St Cyr" 
+"nom": "Christalline St Cyr"
 },
 "30": {
  "k": 1,
-"city": "Christalline St JB" 
+"nom": "Christalline St JB"
 },
 "31": {
  "k": 3,
-"city": "Christalline St Medard" 
+"nom": "Christalline St Medard"
 },
 "32": {
  "k": 1,
-"city": "Christalline St Sophie" 
+"nom": "Christalline St Sophie"
 },
 "33": {
  "k": 1,
-"city": "Christalline St Sophie" 
+"nom": "Christalline St Sophie"
 },
 "34": {
  "k": 3,
-"city": "Christalline Vogia" 
+"nom": "Christalline Vogia"
 },
 "36": {
  "k": 3,
-"city": "Mont Auv Carrefour" 
+"nom": "Mont Auv Carrefour"
 },
 "37": {
  "k": 3,
-"city": "Montagne Alpes" 
+"nom": "Montagne Alpes"
 },
 "38": {
  "k": 3,
-"city": "Montagne Ecrins" 
+"nom": "Montagne Ecrins"
 },
 "40": {
  "k": 1,
-"city": "Versoie" 
+"nom": "Versoie"
 },
 "41": {
  "k": 1,
-"city": "Evian" 
+"nom": "Evian"
 },
 "44": {
  "k": 5,
-"city": "Hepar" 
+"nom": "Hepar"
 },
 "47": {
  "k": 3,
-"city": "La Montille" 
+"nom": "La Montille"
 },
 "48": {
  "k": 3,
-"city": "Laqueille" 
+"nom": "Laqueille"
 },
 "49": {
  "k": 3,
-"city": "Luchon" 
+"nom": "Luchon"
 },
 "50": {
  "k": 3,
-"city": "Montcalm" 
+"nom": "Montcalm"
 },
 "51": {
  "k": 3,
-"city": "MontDore" 
+"nom": "MontDore"
 },
 "52": {
  "k": 3,
-"city": "Mont Roucous" 
+"nom": "Mont Roucous"
 },
 "55": {
  "k": 3,
-"city": "Ondine St Benoit" 
+"nom": "Ondine St Benoit"
 },
 "57": {
  "k": 2,
-"city": "Parot" 
+"nom": "Parot"
 },
 "58": {
  "k": 1,
-"city": "Perrier" 
+"nom": "Perrier"
 },
 "60": {
  "k": 3,
-"city": "Plancoet" 
+"nom": "Plancoet"
 },
 "61": {
  "k": 4,
-"city": "Quezac" 
+"nom": "Quezac"
 },
 "62": {
  "k": 4,
-"city": "Renlaigue" 
+"nom": "Renlaigue"
 },
 "63": {
  "k": 2,
-"city": "Rozana" 
+"nom": "Rozana"
 },
 "64": {
  "k": 1,
-"city": "Salvetat" 
+"nom": "Salvetat"
 },
 "65": {
  "k": 1,
-"city": "St Amand" 
+"nom": "St Amand"
 },
 "67": {
  "k": 4,
-"city": "St Diery" 
+"nom": "St Diery"
 },
 "68": {
  "k": 4,
-"city": "Ste Marguerite" 
+"nom": "Ste Marguerite"
 },
 "69": {
  "k": 3,
-"city": "Sancy" 
+"nom": "Sancy"
 },
 "70": {
  "k": 1,
-"city": "San Pellegrino" 
+"nom": "San Pellegrino"
 },
 "72": {
  "k": 5,
-"city": "Talians" 
+"nom": "Talians"
 },
 "73": {
  "k": 1,
-"city": "Terres de Flein" 
+"nom": "Terres de Flein"
 },
 "74": {
  "k": 1,
-"city": "Thonon" 
+"nom": "Thonon"
 },
 "75": {
  "k": 4,
-"city": "Vals" 
+"nom": "Vals"
 },
 "77": {
  "k": 4,
-"city": "Verniere" 
+"nom": "Verniere"
 },
 "78": {
  "k": 2,
-"city": "Vichy Celestins" 
+"nom": "Vichy Celestins"
 },
 "80": {
  "k": 1,
-"city": "Vittel" 
+"nom": "Vittel"
 },
 "81": {
  "k": 3,
-"city": "Volcania" 
+"nom": "Volcania"
 },
 "82": {
  "k": 3,
-"city": "Volvic" 
+"nom": "Volvic"
 },
 "84": {
  "k": 3,
-"city": "Zilia" 
+"nom": "Zilia"
 },
 "85": {
  "k": 3,
-"city": "Sidi Ali" 
+"nom": "Sidi Ali"
 },
 "86": {
  "k": 1,
-"city": "Sidi Harazem" 
+"nom": "Sidi Harazem"
 },
 "87": {
  "k": 1,
-"city": "Ain Saiss" 
+"nom": "Ain Saiss"
 },
 "88": {
  "k": 4,
-"city": "Oulmès" 
+"nom": "Oulmï¿½s"
 },
 "93": {
  "k": 3,
-"city": "Bahia" 
+"nom": "Bahia"
 },
 "94": {
  "k": 3,
-"city": "Ciel" 
+"nom": "Ciel"
 },
 "95": {
  "k": 3,
-"city": "Mazine" 
-} 
+"nom": "Mazine"
+}
 }
