@@ -641,7 +641,7 @@ s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Cercle des corrélations dans le 
 s.corcircle(auto.acp$co, xax=1, yax=3); mtext("Cercle des corrélations dans le plan 1-3")
 s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Cercle des corrélations dans le plan 2-3")
 ```
-<div style="text-align:center">Figure 8</div>
+<div style="text-align:center">Figure 9</div>
 <br/>
 
 <U>Interprétation :</U>
@@ -702,7 +702,7 @@ s.corcircle(new.auto.acp$co, xax=2, yax=3); mtext("Cercle des corrélations dans
 
 L'interprétation des axes est donc par conséquent la même.
 
-<div style="text-align:center">Figure 9</div>
+<div style="text-align:center">Figure 10</div>
 <br/>
 
 #####<u>Analyse des observations</u>
@@ -767,7 +767,7 @@ s.label(new.auto.acp$li,xax=1,yax=3); mtext("Projection des observations dans le
 s.label(new.auto.acp$li,xax=2,yax=3); mtext("Projection des observations dans le plan 2-3") 
 ```
 
-<div style="text-align:center">Figure 10</div>
+<div style="text-align:center">Figure 11</div>
 
 <div style="text-align:justify">
 <br/>L'idée ici est d'analyser les individus qui ont fait l'objet d'une imputation.
@@ -783,17 +783,17 @@ Cette étude s'est donc avérée enrichissante, dans la mesure où elle a permis
 <div style="text-align:justify">
 Pour approfondir notre analyse, on peut choisir de classer nos individus par catégories, par classes. Ainsi, on pourrait voir apparaître différents types d'eau dans nos données.  
   
-Plusieurs méthodes s'offrent à nous. Cependant, nous n'avons pas vraiment de types d'eaux prédéfinis, ni de données d'entraînement sur lesquelles on pourrait s'appuyer : le choix d'une méthode de partitionnement non supervisée semble donc raisonnable.  
+Plusieurs méthodes s'offrent à nous. Cependant, nous n'avons pas vraiment de types d'eaux prédéfinis, ni de données d'entraînement sur lesquelles s'appuyer : le choix d'une méthode de partitionnement non supervisée semble donc raisonnable.  
   
-La fonction kmeans(data, k) déjà implémentée remplit ce rôle de manière satisfaisante. À partir des données d'entrée et d'un nombre de classes k, l'algorithme va alors regrouper les individus selon les distances des uns par rapport aux autres, jusqu'à trouver les distances minimales.
+La fonction `kmeans(data, k)` déjà implémentée a été conçue à dessein. À partir des données d'entrée et d'un nombre de classes k, l'algorithme regroupe les individus selon leurs distances relatives, jusqu'à trouver les distances minimales.
   
-Même si l'algorithme est déjà implémenté, il nous faut quand même trouver un k optimal. En effet, ce choix est primordial. Si on prend un k trop petit, le risque est de se retrouver avec des classes peu représentatives, assez arbitraires. Cependant, si le k choisi est trop grand, on peut obtenir des classes qui ne s'appliquent qu'à notre jeu de données, ou alors avoir beaucoup de classes mais avec très peu d'individus.  
+Même si l'algorithme est déjà implémenté, il nous faut quand même trouver un k optimal. En effet, ce choix est primordial : si on prend un k trop petit, le risque est de se retrouver avec des classes peu représentatives, assez arbitraires; si le k choisi est trop grand, on peut obtenir des classes qui ne s'appliquent qu'à notre jeu de données, ou alors avoir beaucoup de classes mais avec très peu d'individus.  
   
 Un nombre classique de classes est $\sqrt{2/n}$, notre n étant le nombre d'individus (c'est-à-dire 63 après avoir filtré les données); un k optimal s'approcherait de 6. On va confirmer cette hypothèse avec la méthode suivante :  
   
 Quand on applique l'algorithme, il nous renvoie la somme des carrées des distances entre les individus et le centre des classes. Une part plus petite par rapport à la somme de toutes les distances étant meilleure, on peut dessiner le graphique de cette part, en fonction de k. En observant les décrochages de la courbe, on peut alors décider d'un k satisfaisant.  
   
-```{r echo=FALSE, fig.align='center'}
+```{r echo=FALSE, fig.align='center', fig.cap="Figure 12"}
 data = na.omit(waters[sapply(waters, is.numeric)])
 
 set.seed(3)
@@ -808,18 +808,18 @@ plot(2:10,values, type="b", xlab="Nombre de clusters", ylab = "Part des distance
 
 ```
   
-Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire, on préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
+<br/>Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire. On préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
   
-Grace au graphique, on peut remarquer qu'à k=5, la qualité de représentation ne progresse plus beaucoup. 5 semble donc être raisonnable. Une fois exectuté, l'algorithme nous revoie un tableau des individus classés. On peut donc, pour se donner une idée, appliquer ce tableau à une représentation en deux ou trois dimensions issue de l'ACP.
+Le graphique montre qu'à k=5, la qualité de représentation ne progresse plus beaucoup; 5 semble donc être un choix raisonnable. Une fois exectuté, l'algorithme nous revoie un tableau des individus classés. On peut donc, pour se donner une idée, appliquer ce tableau à une représentation en deux ou trois dimensions issue de l'ACP.
 
-```{r echo=FALSE, fig.align='center'}
+```{r echo=FALSE, fig.align='center', fig.cap="Figure 13"}
 acp = dudi.pca(data, scannf = FALSE, nf=3)
 
 plot(acp$li[,1], acp$li[,2], xlab = "Axe 1", ylab = "Axe 2", type="n", main="Représentation des individus classés en deux dimensions")
 text(x=acp$li[,1], y=acp$li[,2], labels = row.names(acp$li), col=unname(classi$cluster))
 ```
 
-L'algorithme nous revoie donc un tableau des individus avec un numéros de classe associé. On peut alors, pour se donner une idée, appliquer ce tableau à une représentation en deux ou trois dimensions issue de l'ACP.
-
 </div>
+
+## Conclusion
 
