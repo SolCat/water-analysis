@@ -86,7 +86,7 @@ Dans ce jeu de données, on distingue 84 observations actives (eaux françaises)
 On note que certaines données sont incomplètes. En effet, toutes les variables ne sont pas renseignées pour chacune des différentes eaux. Par exemple, les concentrations en K, Cl et SO4 de l'eau <em>Aquarelle</em>, ainsi que son PH, ne sont pas connus (cf. tableau). Il convient dans un premier temps d'étudier la fiabilité des différentes variables, de façon à détecter les valeurs manquantes, incohérentes, extrêmes ou aberrantes : c’est l’objet des résumés unidimensionnels. 
 </div>
 
-### 1.2 Analyse exloratoire des données
+### 1.2 Analyse exploratoire des données
 ####1.2.1 Recherche des données manquantes
 
 On s'intéresse en premier lieu aux données manquantes, représentées via le symbole <em>NA</em>.
@@ -778,6 +778,39 @@ L'interprétation liée aux projections des individus imputés sur les autres pl
 
 Cette étude s'est donc avérée enrichissante, dans la mesure où elle a permis de repositionner quelques individus préalablement non étudiés, bien que la qualité de représentation de la majorité d'entre eux, trop médiocre, a limité la portée de notre analyse.
 </div>
+
+
+##2.3 ACP sur le troisième jeu de données
+
+<div style="text-align:justify">
+Nous considérons enfin le jeu de données, où les observations sont passées en tant qu'individus supplémentaires. En effet, l'ACP est sensible à des valeurs qui peuvent varier dans les extrêmes. De plus, si une erreur survient dans les étapes entre la mesure des valeurs et leur analyse ( étalonnage des instruments, recopie manuelle des valeurs, autres ) il peut être interessant d'enlever des valeurs qui pourraient paraître erronées pour la construction de notre ACP.  
+  
+Il faut donc séparer les valeurs qui se démarquent trop. La fonction `boxplot.stats(x)$out` renvoie les valeurs au dessous et au dessus de 4 fois l'intervalle interquartile. Avec ce traitement appliqué à chaque variable, on peut récupérer la liste des individus aux valeurs extrêmes. On peut ensuite créer deux listes distinctes, qui seront nos individus actifs d'un côté et passifs de l'autre.  
+  
+```{r}
+num_outliers = unique(unlist(apply(acp.variables, 2, function(x){which(x %in% boxplot.stats(x)$out)})))
+outliers = acp.variables[num_outliers,]
+without_outliers = acp.variables[setdiff(c(1:nrow(acp.variables)), num_outliers),]
+```
+  
+Une fois le filtre sur les valeurs manquantes, puis extrêmes appliqué, on se retrouve avec seulement 31 individus. Cependant on peut quand même espérer une meilleure représentation.
+  
+```{r}
+
+```
+  
+####2.3.1 Sélection des axes et plans retenus
+
+####2.3.2 Projection des variables et observations dans un plan donné
+
+#####<u>Analyse des variables</u>
+
+#####<u>Analyse des observations</u>
+
+#####<u>Analyse croisée des variables et observations</u>
+
+</div>
+
 ##2.4 Classification non supervisée de type k-means
 
 <div style="text-align:justify">
@@ -785,7 +818,7 @@ Pour approfondir notre analyse, on peut choisir de classer nos individus par cat
   
 Plusieurs méthodes s'offrent à nous. Cependant, nous n'avons pas vraiment de types d'eaux prédéfinis, ni de données d'entraînement sur lesquelles on pourrait s'appuyer : le choix d'une méthode de partitionnement non supervisée semble donc raisonnable.  
   
-La fonction kmeans(data, k) déjà implémentée remplit ce rôle de manière satisfaisante. À partir des données d'entrée et d'un nombre de classes k, l'algorithme va alors regrouper les individus selon les distances des uns par rapport aux autres, jusqu'à trouver les distances minimales.
+La fonction `kmeans(data, k)` déjà implémentée remplit ce rôle de manière satisfaisante. À partir des données d'entrée et d'un nombre de classes k, l'algorithme va alors regrouper les individus selon les distances des uns par rapport aux autres, jusqu'à trouver les distances minimales.
   
 Même si l'algorithme est déjà implémenté, il nous faut quand même trouver un k optimal. En effet, ce choix est primordial. Si on prend un k trop petit, le risque est de se retrouver avec des classes peu représentatives, assez arbitraires. Cependant, si le k choisi est trop grand, on peut obtenir des classes qui ne s'appliquent qu'à notre jeu de données, ou alors avoir beaucoup de classes mais avec très peu d'individus.  
   
