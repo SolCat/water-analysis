@@ -135,5 +135,5 @@ legend(x = "bottomright",legend=unique(water_type),col=1:length(water_type),pch=
 #eaux_actives <- filter(eaux, Pays== "France")
 dudi = dudi.pca(df = acp_waters$raw_data, scannf = FALSE, nf = 3)
 
-cor(acp_waters$matrix[setdiff(c(1:nrow(acp_waters$matrix)), unique(unlist(apply(acp_waters$matrix, 2, function(x){which(x %in% boxplot.stats(x)$out)})))),])
+acp_waters$matrix[setdiff(c(1:nrow(acp_waters$matrix)), unique(unlist(apply(acp_waters$matrix, 2, function(x){which(x %in% boxplot.stats(x)$out)})))),]
 

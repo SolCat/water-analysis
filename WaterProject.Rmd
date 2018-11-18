@@ -810,7 +810,7 @@ plot(2:10,values, type="b", xlab="Nombre de clusters", ylab = "Part des distance
   
 <br/>Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire. On préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
   
-Le graphique montre qu'à k=5, la qualité de représentation ne progresse plus beaucoup; 5 semble donc être un choix raisonnable. Une fois exectuté, l'algorithme nous revoie un tableau des individus classés. On peut donc, pour se donner une idée, appliquer ce tableau à une représentation en deux ou trois dimensions issue de l'ACP.
+Le graphique montre qu'à k=5, la qualité de représentation ne progresse plus beaucoup; 5 semble donc être un choix raisonnable. Une fois executé, l'algorithme nous revoie un tableau des individus classés. On peut donc, pour se donner une idée, appliquer ce tableau à une représentation en deux ou trois dimensions issue de l'ACP.
 
 ```{r echo=FALSE, fig.align='center', fig.cap="Figure 13"}
 acp = dudi.pca(data, scannf = FALSE, nf=3)
