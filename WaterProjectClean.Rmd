@@ -410,7 +410,7 @@ Le tracé des graphiques de répartion des eaux par Nature (plates, gazeuses) da
 En rouge, sont désignées les observations de nature gazeuse; en noir, les observations de nature plate. 
 Les cercles de corrélations ici dessinés sont ceux issus de notre fonction ACP.
 
-```{r echo=FALSE, out.width='49%', fig.cap="Répartition des eaux par nature"}
+```{r echo=FALSE, out.width='49%', fig.cap="Cercle des corrélations", fig.show='hold', fig.align="center"}
 acpn = function(data_in, round_precision = 3){  
   result = list()
   
@@ -502,7 +502,7 @@ acpn = function(data_in, round_precision = 3){
     axis1 = result$coords[,combi[1]]
     axis2 = result$coords[,combi[2]]
     par(mfrow=c(1,1))
-    plot(axis1, axis2, xlim=c(-1,1), ylim=c(-1,1), asp = 1, type = "n", xlab = sprintf("Axe %d",combi[1]), ylab = sprintf("Axe %d",combi[2]), main = sprintf("Cercle des corrélations dans le plan %d-%d", combi[1], combi[2]) )
+    plot(axis1, axis2, xlim=c(-1,1), ylim=c(-1,1), asp = 1, type = "n", xlab = sprintf("Axe %d",combi[1]), ylab = sprintf("Axe %d",combi[2]), main = sprintf("Plan %d-%d", combi[1], combi[2]) )
     abline(h=0,v=0)
     draw.circle(x = 0, y = 0, radius = c(1,1))
     arrows(0, 0, axis1, axis2, length = 0.10, code = 2, col = gray(0.6))
@@ -581,23 +581,23 @@ round(acpcos2sup[,1:3]*1000)
 
 Seules les observations bien représentées peuvent être correctement analysées. L'observation #86 est, à titre d'exemple, très mal représentée, quel que soit le plan. Même chose pour l'observation #94 dans le plan 1-3. Nous nous focaliserons donc sur les autres observations.
 
-```{r echo=FALSE, out.width="49%"}
+```{r echo=FALSE, out.width="49%", fig.show="hold"}
 csup1 <- ligsup$lisup[,1]
 csup2 <- ligsup$lisup[,2]
 plot(axe1, axe2, type="n", main="Individus actifs et supplémentaires dans le plan 1-2", xlim=c(-2,2))
 abline(h=0,v=0)
-text(axe1, axe2, row.names(auto.acp$li),)
+text(axe1, axe2, row.names(auto.acp$li))
 text(csup1, csup2, row.names(ligsup$lisup), col="red", cex=1.2)
 # Graphe des observations actives et supplémentaires - plan 1-3
 csup3 <- ligsup$lisup[,3]
 plot(axe1, axe3, type="n", main="Individus actifs et supplémentaires dans le plan 1-3", xlim=c(-2,2))
 abline(h=0,v=0)
-text(axe1, axe3, row.names(auto.acp$li),)
+text(axe1, axe3, row.names(auto.acp$li))
 text(csup1, csup3, row.names(ligsup$lisup), col="red", cex=1.2)
 # Graphe des observations actives et supplémentaires - plan 2-3
 plot(axe2, axe3, type="n", main="Individus actifs et supplémentaires dans le plan 2-3", xlim=c(-2,2))
 abline(h=0,v=0)
-text(axe2, axe3, row.names(auto.acp$li),)
+text(axe2, axe3, row.names(auto.acp$li))
 text(csup2, csup3, row.names(ligsup$lisup), col="red", cex=1.2)
 ```
 ```{r echo=FALSE, out.width='49%'}
@@ -720,7 +720,7 @@ Les eaux Hydroxydase (échantillon 45) et Vichy St Yorre (échantillon 79) enreg
 Un examen identique de la seconde composante ne révèle aucune indication supplémentaire. Les eaux imputées ne contribuent pas à cet axe. Même remarque pour le troisième axe.
 
 ####Analyse croisée des variables et observations
-```{r echo=FALSE, out.width='49%', fig.cap="Projection des observations", fig.align="center"}
+```{r echo=FALSE, out.width='49%', fig.cap="Projection des observations", fig.align="center",fig.show='hold'}
 s.label(new.auto.acp$li,xax=1,yax=2); mtext("Plan 1-2") 
 s.label(new.auto.acp$li,xax=1,yax=3); mtext("Plan 1-3") 
 s.label(new.auto.acp$li,xax=2,yax=3); mtext("Plan 2-3") 
@@ -790,13 +790,12 @@ Seule les corrélations mettant en jeu la variable Mg sont donc ici différentes
 
 Il semblerait également que cette configuration soit propice à une meilleure représentation de la variable PH, désormais plus proche du bord du cercle des corrélations dans les plans 1-3 et 2-3, comme on peut le voir ci-contre :
 
-```{r echo=FALSE, out.width='49%', fig.cap="Cercle des corrélations", fig.align="center"}
+```{r echo=FALSE, out.width='49%', fig.cap="Cercle des corrélations", fig.align="center", fig.show='hold'}
 s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Plan 1-2")
 s.corcircle(auto.acp$co, xax=1, yax=3); mtext("Plan 1-3")
 s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Plan 2-3")
 ```
 
-<div style="text-align:center">Figure 12
   
 
 *Interprétation des axes :*
