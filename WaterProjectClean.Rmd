@@ -1,18 +1,14 @@
 ---
+title: "Mise en oeuvre d'une ACP sur des Eaux"
+author: 
+- Solène CATELLA
+- Hugo LE BAHER
 output:
-  pdf_document: default
-  html_document: default
+    pdf_document
+documentclass: article
 ---
-<div>
-Solène CATELLA<br/>
-Hugo LE BAHER
-</div>
-<div style="text-align:center">
-<br/>  
 
-# Mise en oeuvre d'une ACP sur des Eaux
-
-</div>
+# 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -20,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ***
 
-##Sommaire
+#Sommaire
 
 
 [Introduction]
@@ -73,9 +69,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ***
 
-## Introduction
+# Introduction
 
-<div style="text-align:justify">
 Gazeuse, dé-ionisée ou encore riche en magnésium, l'eau, élément naturel et central dans notre vie quotidienne, peut revêtir plusieurs formes. Sa composition minérale, sa provenance, sa nature mais aussi son potentiel hydrogène sont autant de paramètres qui entrent en jeu dans sa caractérisation. Analyser une eau revient donc à s'intéresser à l'ensemble des attributs et propriétés susceptibles de la définir.
 
 Le jeu de données dont nous disposons recense près de 100 eaux (95 exactement), déclinées sous 12 variables à la fois qualitatives (nom, nature, pays) et quantitatives (composition ionique, sodique, etc.). L'intérêt d'une ACP est, entre autres, de caractériser des observations dites "multivariées", c'est-à-dire multidimensionnelles, et d'en dégager des relations de ressemblance/dissemblance. En d'autres termes, l'ACP permet d'avoir une vue globale et synthétique des données : c'est la raison pour laquelle son usage est ici parfaitement approprié. 
@@ -83,10 +78,10 @@ Le jeu de données dont nous disposons recense près de 100 eaux (95 exactement)
 Avant de procéder à l'ACP en tant que telle, nous explorerons le jeu de données au travers d'analyses univariées et bivariées. Une classification de type non-supervisée sera menée en dernier lieu, via la méthode des K-means.
 
 Le présent document a été réalisé à partir de RMarkdown.
-</div>
 
-## 1. Analyse univariée et bivariée
-###1.1. Etude du jeu de données
+
+# 1. Analyse univariée et bivariée
+##1.1. Etude du jeu de données
 
 `r waters <- read.table("./Eaux2018 FM.txt", header=TRUE, sep="\t")`
 
@@ -98,33 +93,30 @@ head(waters)
 ```{r}
 dim(waters)
 ```
-<div style="text-align:justify">
+
 Le jeu de données comprend 95 observations réparties sur 12 variables, dont 3 catégorielles (Nom, Nature, Pays) et 9 numériques (Ca, Mg, Na, K, Cl, NO3, SO4, HCO3, PH).
 
 Dans ce jeu de données, on distingue 84 observations actives (eaux françaises) pour 11 observations supplémentaires (eaux marocaines).
 
-On note que certaines données sont incomplètes. En effet, toutes les variables ne sont pas renseignées pour chacune des différentes eaux. Par exemple, les concentrations en K, Cl et SO4 de l'eau <em>Aquarelle</em>, ainsi que son PH, ne sont pas connus (cf. tableau). Il convient dans un premier temps d'étudier la fiabilité des différentes variables, de façon à détecter les valeurs manquantes, incohérentes, extrêmes ou aberrantes : c’est l’objet des résumés unidimensionnels. 
-</div>
+On note que certaines données sont incomplètes. En effet, toutes les variables ne sont pas renseignées pour chacune des différentes eaux. Par exemple, les concentrations en K, Cl et SO4 de l'eau *Aquarelle*, ainsi que son PH, ne sont pas connus (cf. tableau). Il convient dans un premier temps d'étudier la fiabilité des différentes variables, de façon à détecter les valeurs manquantes, incohérentes, extrêmes ou aberrantes : c’est l’objet des résumés unidimensionnels. 
 
-### 1.2. Analyse exploratoire des données
-####1.2.1. Recherche des données manquantes
+## 1.2. Analyse exploratoire des données
+###1.2.1. Recherche des données manquantes
 
-On s'intéresse en premier lieu aux données manquantes, représentées via le symbole <em>NA</em>.
+On s'intéresse en premier lieu aux données manquantes, représentées via le symbole *NA*.
 
 ```{r}
 colSums(is.na(waters))
 ```
 
-<div style="text-align:justify">
-Parmi les variables étudiées, on remarque que le NO3 et le PH sont celles qui enregistrent le plus grand nombre de valeurs manquantes (19 chacune), suivies des variables Cl, K, Nature, SO4 et HCO3. Ces données manquantes peuvent alors être : <br>
+Parmi les variables étudiées, on remarque que le NO3 et le PH sont celles qui enregistrent le plus grand nombre de valeurs manquantes (19 chacune), suivies des variables Cl, K, Nature, SO4 et HCO3. Ces données manquantes peuvent alors être : 
 
 * Supprimées, de façon à ne conserver que les observations complètes ;
 * Imputées par une valeur plausible ou aléatoire (méthodes d’imputation simples et multiples).
 
 L’étude statistique unidimensionnelle peut nous aider à mieux appréhender la distribution des différentes variables, et préférer l’une ou l’autre de ces méthodes. Dans la mesure où l’Analyse en Composantes Principales (ACP) est une méthode appliquée à des variables quantitatives continues, nous nous intéresserons particulièrement à ces dernières, après avoir brièvement analysé les variables qualitatives.
-</div>  
-  
-####1.2.2. Analyse unidimensionnelle : variables qualitatives
+
+###1.2.2. Analyse unidimensionnelle : variables qualitatives
 
 Le jeu de données comprend 3 variables qualitatives : le nom de l'eau (Nom), sa nature (Nature) et son origine (Pays).
 
@@ -143,23 +135,19 @@ summary(still.waters)
 summary(gaz.waters)
 ```
 
-<div style="text-align:justify">
 Ces résumés nous indiquent que les eaux gazeuses sont en moyenne plus riches que les eaux plates tous minéraux confondus, à l'exception des nitrates (NO3) et sulfates (SO4). Les composants minéraux qui semblent être les plus discriminants dans la distinction des eaux plates et gazeuses sont le HCO3, le Na et le Ca (comparaison des médianes). On note également que les eaux gazeuses enregistrent un PH légèrement inférieur aux eaux plates. 
 
 En termes de répartition des échantillons, on remarque que les eaux plates sont en quantité supérieure, représentant à peu près 2/3 du jeu de données. C'est le diagramme en mosaïque (mosaic plot) qui nous permet d'aboutir à de telles conclusions, en faisant la représentation des effectifs relatifs à un tableau de contingence, ici défini par les variables Pays et Nature. 
 
-```{r fig.align='center', fig.cap="Répartition des eaux par Pays et Nature"}
+```{r fig.cap="Répartition des eaux par Pays et Nature", out.width="70%", fig.align='center'}
 table(waters$Nature, waters$Pays) 
-mosaicplot(~waters$Pays+waters$Nature, data=waters, color=TRUE)
+mosaicplot(~waters$Pays+waters$Nature, data=waters, main="", color=TRUE)
 ```
 
-<br/>
-Comme on peut le voir, les eaux gazeuses sont exclusivement françaises : il n'y a pas d'eaux marocaines gazeuses. On peut aussi relever que les eaux marocaines sont très peu représentées vis-à-vis des eaux françaises, raison pour laquelle elles sont sans doute traitées dans cette analyse comme des observations supplémentaires.<br/>
-</div>
+Comme on peut le voir, les eaux gazeuses sont exclusivement françaises : il n'y a pas d'eaux marocaines gazeuses. On peut aussi relever que les eaux marocaines sont très peu représentées vis-à-vis des eaux françaises, raison pour laquelle elles sont sans doute traitées dans cette analyse comme des observations supplémentaires.  
 
-####1.2.3. Analyse unidimensionnelle : variables quantitatives
+###1.2.3. Analyse unidimensionnelle : variables quantitatives
 
-<div style="text-align:justify">
 Nous nous intéressons désormais aux variables quantitatives.
  
 La commande `summary` fournit un résumé détaillé des variables étudiées, ici numériques (minimum, premier quartile, médiane, moyenne, troisième quartile et maximum).
@@ -168,57 +156,42 @@ summary(waters[sapply(waters, is.numeric)])
 ```
 
 En moyenne, les eaux sont principalement concentrées en HCO3 (691.4 mg/L), Na (151.4 mg/L), Ca (111.1 mg/L) et SO4 (108.7 mg/L). Cependant, dans la mesure où un grand nombre de variables enregistrent des valeurs extrêmes telles HCO3 (maximum à 6722.2 mg/L) ou Na (maximum à 1945 mg/L), la médiane apparaît ici comme une meilleure mesure centrale, car plus robuste que la moyenne. Exception faites des variables HCO3 et Ca, on remarque que les concentrations oscillent alors entre 2 mg/L et 18 mg/L, tous composants minéraux confondus.
-</div>
 
-```{r echo=FALSE, fig.align='center', fig.cap="Figure 2"}
-boxplot(waters[sapply(waters, is.numeric)], main="Boîtes à moustaches des variables quantitatives du jeu de données")
+
+```{r echo=FALSE, fig.cap="Boîtes à moustaches des variables quantitatives du jeu de données", out.width="100%", fig.align='center'}
+boxplot(waters[sapply(waters, is.numeric)], main="")
 ```
 
-<div style="text-align:justify">
-<br/>Un examen plus fin, variable par variable, nous permettra de mieux apprécier leurs distributions respectives. On étudiera tout particulièrement les variables PH et NO3, enregistrant ici le plus grand nombre de données manquantes (19).
-</div>
 
-##### <br/><u>Etude de la variable PH</u>
+Un examen plus fin, variable par variable, nous permettra de mieux apprécier leurs distributions respectives. On étudiera tout particulièrement les variables PH et NO3, enregistrant ici le plus grand nombre de données manquantes (19).
 
-<div style="text-align:justify">
+####Etude de la variable PH
+
 Le tracé de la boîte à moustache de la variable PH laisse apparaître une distribution symétrique. On note que les valeurs de sa moyenne (6.905) et sa médiane (7.000) sont très proches. Sa distribution, homogène et faiblement dispersée, semble s’approcher de celle d’une loi Normale (voire figure ci-contre).
-</div>
 
-```{r echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', out.width="49%"}
+```{r echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', out.width="49%", fig.cap="Variable PH"}
 boxplot(waters$PH, main="Boîte à moustache de la variable PH")
 hist(waters$PH, prob=TRUE, main="Histogramme et densité de probabilité du PH", xlab="PH")
 curve(dnorm(x, mean=mean(waters$PH, na.rm=TRUE), sd=sd(waters$PH, na.rm=TRUE)), add=TRUE, col="red")
 ```
+L'histogramme du PH, approché par une courbe de densité en forme de "cloche", vient confirmer cette hypothèse (voir figure ci-contre).
 
-<div style="text-align:center">Figure 3</div>
-
-
-<div style="text-align:justify">
-<br/>L'histogramme du PH, approché par une courbe de densité en forme de "cloche", vient confirmer cette hypothèse (voir figure ci-contre).
-</div>
-
-##### <br/><u>Etude de la variable NO3</u>
+####Etude de la variable NO3
 
 La distribution de la variable NO3 est ici quelque peu différente : l’histogramme indique une distribution non-symétrique et non-homogène.
 
-```{r echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', out.width="49%"}
+```{r echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', out.width="49%",fig.cap="Variable NO3"}
 boxplot(waters$NO3, main="Boîte à moustache de la variable NO3")
 hist(waters$NO3, prob=TRUE, main="Histogramme et densité de probabilité du NO3", xlab="NO3")
 curve(dnorm(x, mean=mean(waters$NO3, na.rm=TRUE), sd=sd(waters$NO3, na.rm=TRUE)), add=TRUE, col="red")
 ```
+Le tracé de la boîte à moustache de cette variable révèle la présence de nombreuses valeurs extrêmes (symbolisées par un “°”) : ces valeurs s'écartent fortement de la valeur moyenne obtenue. 
 
-<div style="text-align:center">Figure 4</div>
+####Etude des variables Cl, K, SO4 et HCO3 :
 
-<div style="text-align:justify">
-<br/>Le tracé de la boîte à moustache de cette variable révèle la présence de nombreuses valeurs extrêmes (symbolisées par un “°”) : ces valeurs s'écartent fortement de la valeur moyenne obtenue. 
-</div>
-
-##### <br/><u>Etude des variables Cl, K, SO4 et HCO3 :</u>
-
-<div style="text-align:justify">
 Les variables Cl, K, SO4 et HCO3 témoignent d’une distribution à nouveau non symétrique, peu homogène, enregistrant un grand nombre de valeurs extrêmes. Le tracé de leur densité de probabilité s’éloigne ici d’une loi normale. 
 
-```{r echo=FALSE, fig.height=8, fig.width=10, out.width="100%", fig.align='center', fig.cap="Figure 5"}
+```{r echo=FALSE, fig.height=7, fig.width=11, out.width="100%", fig.align='center', fig.cap="Histogrammes et desités"}
 par(mfrow=c(2,2))
 hist(waters$Cl, prob=TRUE, main="Histogramme et densité de probabilité du Cl", xlab="Cl")
 curve(dnorm(x, mean=mean(waters$Cl, na.rm=TRUE), sd=sd(waters$Cl, na.rm=TRUE)), add=TRUE, col="red")
@@ -230,18 +203,13 @@ hist(waters$HCO3, prob=TRUE, main="Histogramme et densité de probabilité du HC
 curve(dnorm(x, mean=mean(waters$HCO3, na.rm=TRUE), sd=sd(waters$HCO3, na.rm=TRUE)), add=TRUE, col="red")
 ```
 
-<br/>Avant de poursuivre notre analyse par une étude bidimensionnelle, il peut donc être pertinent de s’intéresser aux données suspectes (outliers) susceptibles d’être à l’origine de ces distorsions, afin de les corriger et/ou supprimer puisqu’elles influeront nécessairement sur les résultats obtenus dans le cadre de notre ACP.
-</div>
+Avant de poursuivre notre analyse par une étude bidimensionnelle, il peut donc être pertinent de s’intéresser aux données suspectes (outliers) susceptibles d’être à l’origine de ces distorsions, afin de les corriger et/ou supprimer puisqu’elles influeront nécessairement sur les résultats obtenus dans le cadre de notre ACP.
 
+###1.2.4. Recherche des valeurs extrêmes/outliers
 
-####1.2.4. Recherche des valeurs extrêmes/outliers
-
-<div style="text-align:justify">
 Le repérage des données suspectes peut être mené via plusieurs méthodes. Le test de Grubbs est le test le plus courant, mais n’étant applicable que si la distribution de l’échantillon suit une loi Normale ou est voisine d'une loi Normale, il ne sera ici pas retenu.
-
+  
 Graphiquement, le tracé des boxplots révèle la présence d’outliers pour les variables SO4, K, Na, Cl et HCO3, et dans une moindre mesure NO3, Ca et Mg. Dans le cadre de variables continues, il s’agit des observations dont la valeur excède 1.5 fois l’écart interquartile. La commande `boxplot.stats(data)$out` permet de dégager ces valeurs, en considérant chaque variable prise une à une (par exemple ici, SO4) :
-
-</div>
 
 ```{r}
 boxplot.stats(waters$SO4)$out
@@ -253,31 +221,24 @@ La commande which permet d’identifier les indices des outliers :
 which(waters$SO4 %in% boxplot.stats(waters$SO4)$out)
 ```
   
-<div style="text-align:justify">
 Les outliers sont donc très présents dans ce jeu de données. Il pourrait ainsi être judicieux de générer un deuxième jeu de données sans ces extrema, ou en tout cas essayer de s'en affranchir autant que faire se peut, de façon à ne pas biaiser la suite de notre étude. Passer ces données en observations supplémentaires dans le cadre de notre ACP est une façon de neutraliser ces valeurs.
-</div>
+
 
  
-####1.2.5. Analyse bidimensionnelle
+###1.2.5. Analyse bidimensionnelle
 
-<div style="text-align:justify">
 Intéressons-nous désormais à l'analyse bidimensionnelle. L’objectif ici est de pouvoir mettre en évidence, pour chaque paire de variables considérée, l’existence de variations simultanées, aussi appelées liaisons. 
 La matrice des scatterplots permet de visualiser les liaisons existantes entre variables quantitatives prises deux à deux. 
-</div>
 
-```{r echo=FALSE, fig.align='center', fig.cap="Figure 6"}
-plot(waters[sapply(waters, is.numeric)], main="Nuage de points croisant deux à deux les variables du jeu de données")
+```{r echo=FALSE, fig.align='center', fig.cap="Nuage de points croisant deux à deux les variables du jeu de données"}
+plot(waters[sapply(waters, is.numeric)], main="")
 ```
 
-<div style="text-align:justify">
-<br/>On observe ainsi graphiquement l’existence de corrélations entre les variables Na, K et HCO3. Cette hypothèse peut être vérifiée via l’étude numérique des corrélations inter-variables (`commande cor`).
-</div>
+On observe ainsi graphiquement l’existence de corrélations entre les variables Na, K et HCO3. Cette hypothèse peut être vérifiée via l’étude numérique des corrélations inter-variables (`commande cor`).
 
 ```{r, fig.align='center'}
 round(cor(waters[sapply(waters, is.numeric)], use="complete.obs"),3)
 ```
-
-<div style="text-align:justify">
 
 Les variables les plus corrélées positivement sont les variables HCO3 et NA (0.910), HCO3 et K (0.883) et Na et K (0.867) : elles varient simultanément de façon semblable.  
   
@@ -301,11 +262,9 @@ acpn = function(data_in, round_precision = 3){
   return(result)
 }
 ```
-</div>
 
-##2. Analyse multivariée
+#2. Analyse multivariée
 
-<div style="text-align:justify">
 Trois jeux de données seront ici considérés :
 
 * un premier jeu de données diminué des données manquantes (approche simpliste) ;
@@ -313,12 +272,11 @@ Trois jeux de données seront ici considérés :
 * un troisième jeu de données brute où, comme nous l'avons écrit plus haut, les outliers seront passés en observations supplémentaires.
 
 Il s’agira donc de travailler sur les données brutes d’abord (1), puis sur un jeu de données transformé ensuite (2). Dans la mesure où les résultats d’une ACP peuvent être biaisés par la présence de données suspectes et que celles-ci sont ici nombreuses, une troisième ACP, où seront passées en individus supplémentaires l’ensemble des données suspectes, sera réalisée. À noter qu’il aurait également été envisageable de neutraliser ces données à l’aide d’une ACP sur les rangs, plus robuste qu’une ACP classique.
-</div>
 
-###2.1. ACP sur le premier jeu de données
 
-<div style="text-align:justify">
-Nous considérons ici le jeu de données brutes, diminué des données manquantes. <br/>
+##2.1. ACP sur le premier jeu de données
+
+Nous considérons ici le jeu de données brutes, diminué des données manquantes.   
 La commande `na.omit` permet d’éliminer d’un jeu de données toutes les lignes incomplètes (contenant des valeurs “NA”).
 
 ```{r}
@@ -330,12 +288,11 @@ On note que 33 observations ont ainsi été retirés du jeu de données initial.
 
 De plus, dans la mesure où l’on souhaite ici que les eaux marocaines soient traitées comme des observations supplémentaires et non pas actives, il faut veiller à les retirer au préalable. Une fois ce traitement réalisé, le jeu de données à traiter ne comporte alors plus que 55 lignes.
 
-Avant de débuter l’ACP à proprement parler, il convient de faire un choix de métrique. Dans la mesure où la variable PH ne s’exprime pas dans la même unité que les autres variables (concentrations en mg/L), on préfèrera ici mettre en oeuvre une ACP normée (ACPN). Éliminer la variable PH du jeu de données conduirait en effet à une perte d’information non négligeable. De plus, les variances des variables étant très éloignées les unes des autres, une ACP non normée n'apparait pas judicieuse.<br/>
-</div>
+Avant de débuter l’ACP à proprement parler, il convient de faire un choix de métrique. Dans la mesure où la variable PH ne s’exprime pas dans la même unité que les autres variables (concentrations en mg/L), on préfèrera ici mettre en oeuvre une ACP normée (ACPN). Éliminer la variable PH du jeu de données conduirait en effet à une perte d’information non négligeable. De plus, les variances des variables étant très éloignées les unes des autres, une ACP non normée n'apparait pas judicieuse.
 
-####2.1.1. Sélection des axes et plans retenus
 
-<div style="text-align:justify">
+###2.1.1. Sélection des axes et plans retenus
+
 L’ACPN est effectuée par un appel à la procédure `dudi.pca`.
 
 La première étape consiste à sélectionner les axes à retenir. Cette sélection s’appuie sur l’examen des valeurs propres, où chaque valeur propre correspond à la part d’inertie projetée sur un axe donnée.
@@ -348,56 +305,52 @@ auto.acp <- dudi.pca(df = acp.variables, center = TRUE, scale = TRUE, scannf = F
 ```
 
 Dans le cadre d’une ACP normée, on peut utiliser le critère de Kaiser selon lequel ne seront retenus que les facteurs ayant une valeur propre supérieure à 1. On remarque ici que seules les trois premières valeurs propres sont supérieures à 1. L’histogramme des valeurs propres traduit ce fait.
-</div>
 
 ```{r}
 round(cumsum(100*auto.acp$eig/sum(auto.acp$eig)), 3)
 ```
 Cumulées, elles représentent alors plus de 82.02% de la variabilité totale. On ne conservera donc ici que les trois premiers axes.
-<br/>  
 
-####2.1.2. Projection des variables et observations dans un plan donné
+
+###2.1.2. Projection des variables et observations dans un plan donné
   
-#####<u>Analyse des variables</u>
+####Analyse des variables
 
 ```{r}
 round(auto.acp$co,3)
 ```
 
-<div style="text-align:justify">
 On remarque que :
 
 * La première composante traduit l’existence de fortes corrélations entre HCO3 (-0.917), K (-0.907), Na (-0.864), et dans une moindre mesure Mg (-0.792) et Cl (-0.765).
 * La deuxième composante traduit l’existence de fortes corrélations entre SO4 (-0.944) et Ca (-0.886.
 * Enfin, la troisième composante traduit l’existence de corrélations négatives entre NO3 (-0.903) et PH (0.554)
 
-NB : On note que la variabilité des six dernières composantes principales (non retenues ici) est beaucoup plus faible que celle des composantes retenues. Autrement dit, la distance qu’elles traduisent entre les observations est négligeable.<br/>
+NB : On note que la variabilité des six dernières composantes principales (non retenues ici) est beaucoup plus faible que celle des composantes retenues. Autrement dit, la distance qu’elles traduisent entre les observations est négligeable.  
 
 Le tracé du cercle des corrélations peut nous aider à apprécier ces corrélations, ainsi que la bonne représentation des différentes variables (proximité vis-à-vis du bord du cercle). Dans la mesure où l’on a décidé ici de retenir 3 axes, il faut alors tracer trois graphiques distincts pour chaque nuage : le nuage projeté sur le plan (axe1, axe2), celui projeté sur le plan (axe1, axe3) et enfin celui sur le plan (axe2, axe3).  
-</div>
 
-```{r echo=FALSE, out.width='49%'}
-s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Cercle des corrélations dans le plan 1-2")
-s.corcircle(auto.acp$co, xax=1, yax=3); mtext("Cercle des corrélations dans le plan 1-3")
-s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Cercle des corrélations dans le plan 2-3")
+
+```{r echo=FALSE, out.width='49%', fig.cap="Cercle des corrélations", fig.show='hold'}
+s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Plan 1-2")
+s.corcircle(auto.acp$co, xax=1, yax=3); mtext("Plan 1-3")
+s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Plan 2-3")
 ```
 
-<div style="text-align:center">Figure 7</div>
 
-<div style="text-align:justify">
-<br/>Les plans 1-2 et 1-3 permettent permettent de distinguer 2 groupes de variables distincts, tels que décrits plus haut : Na, K, HCO3, Cl et Mg d’une part, Ca et SO4 d’autre part. Les variables NO3 et PH sont assez mal représentées dans ce plan (éloignées du bord du cercle de corrélation), à la différence des plans 1-3 et 2-3 où leur représentation est bonne. L’existence de corrélations négatives entre ces deux variables est facilement visualisable dans ces configurations. La conservation des trois premiers axes est donc ici nécessaire si l’on ne souhaite pas aboutir à de mauvaises interprétations.
+Les plans 1-2 et 1-3 permettent permettent de distinguer 2 groupes de variables distincts, tels que décrits plus haut : Na, K, HCO3, Cl et Mg d’une part, Ca et SO4 d’autre part. Les variables NO3 et PH sont assez mal représentées dans ce plan (éloignées du bord du cercle de corrélation), à la différence des plans 1-3 et 2-3 où leur représentation est bonne. L’existence de corrélations négatives entre ces deux variables est facilement visualisable dans ces configurations. La conservation des trois premiers axes est donc ici nécessaire si l’on ne souhaite pas aboutir à de mauvaises interprétations.
 
-<u>Interprétation des axes :</u>
+*Interprétation des axes :*
 
 * Axe 1 : cet axe est lié aux concentrations en Na, K, HCO3, Cl et Mg. Il caractérise la teneur sodique et minérale des eaux ;
 * Axe 2 : cet axe est lié aux concentrations en Ca et SO4. Il caractérise les eaux riches/pauvres en sulfate et calcium ;
 * Axe 3 : cet axe est lié aux concentrations en NO3. Il caractérise le pouvoir nitrique des eaux (acides ou non).
 
 L'analyse des répartition des observations par nature (eaux plates ou gazeuses) dans chacun des plans permettra de mettre en confrontation les variables quantitatives ici présentées avec la variable qualitative Nature (cf. "Analyse croisée des variables et observations").
-</div>
 
-##### <br/><u>Analyse des observations</u>
-<div style="text-align:justify">
+
+####Analyse des observations
+
 
 ```{r echo=FALSE}
 obs.inertie <- inertia.dudi(auto.acp, row.inertia=TRUE)
@@ -405,7 +358,7 @@ obs.ctr <- obs.inertie$row.abs/100 # (Contribution des observations en %)
 obs.qlt <- obs.inertie$row.re/100 # (Qualité des observations en %)
 ```
 
-<u>Qualité de représentation des observations :</u>
+*Qualité de représentation des observations :*
 
 La commande `obs.inertie$row.re` permet d’apprécier la qualité de représentation des différents individus sur les différents axes.
 La qualité de représentation d’un individu dans un plan donné s’évalue en sommant les qualités de représentation de ce même individu sur les axes du plan donné. Sont affichées ici les 30 premières qualités. 
@@ -416,16 +369,16 @@ NB : Il faut se reporter au jeu de données initial pour établir la corresponda
 head(round(obs.qlt[,1:3],3),30)
 ```
 
-<B>Plan 1-2 :</B>
+**Plan 1-2 :**
 les individus les mieux représentés dans le plan 1-2 sont les eaux Contrex (99,06%), Hepar (98,82%), Courmayeur (95,46%), Talians (95,32%), Christalline Aurelie (92,61%), Zilia (92,14%) et Arvie (90,36%). Les individus les moins bien représentés dans le plan 1-2 sont les eaux Perrier (1,97%), Salvetat (2,55%) et Christalline St Sophie (6,99%)
 
-<B>Plan 1-3 : </B>
+**Plan 1-3 : **
 les individus les mieux représentés dans le plan 1-3 sont les eaux Perrier (94,54%), Montagne Ecrins (92,38%), Montagne Alpes (92,37%) et Christalline Aurelie  (92,11%). Les individus les moins bien représentés dans le plan 1-3 sont les eaux Contrex (0,88%), Courmayeur (1,23%), Talians (2,45%), Hepar (2,60%) et Salvetat (5,92%)
 
-<B>Plan 2-3 :</B>
+**Plan 2-3 :**
 les individus les mieux représentés dans le plan 2-3 sont les eaux Contrex (98,18%), Courmayeur (96,65%), Talians (96,51%), Hépar (96,22%) et Perrier (92,85%). Les individus les moins bien représentés dans le plan 2-3 sont les eaux Rozana (1,31%), Chateldon (3,36%), Christalline Aurelie (4,24%), Christalline St JB (4,86%) et Arvie (6,66%)
 
-<u>Contribution des observations aux axes :</u>
+*Contribution des observations aux axes :*
 
 Nous nous intéressons ici aux observations dont la contribution est supérieure à la contribution moyenne par axe.
 Voici un extrait des contributions des observations aux axes 1, 2 et 3.
@@ -434,13 +387,13 @@ Voici un extrait des contributions des observations aux axes 1, 2 et 3.
 head(round(obs.ctr[,1:3],3),40)
 ```
 
-Les eaux Arvie (échantillon 10), Rozana (échantillon 63), Parot (échantillon 57) et Vichy Celestins (échantillon 78) enregistrent les valeurs (absolues) de la première composante les plus élevées. Ces eaux sont naturellement riches en Na, K, HCO3, Cl et Mg, plutôt acides (PH < 7) et gazeuses.<br/>
+Les eaux Arvie (échantillon 10), Rozana (échantillon 63), Parot (échantillon 57) et Vichy Celestins (échantillon 78) enregistrent les valeurs (absolues) de la première composante les plus élevées. Ces eaux sont naturellement riches en Na, K, HCO3, Cl et Mg, plutôt acides (PH < 7) et gazeuses.  
 
-Un examen identique de la seconde composante révèle que les eaux Talians (échantillon 72), Hepar (échantillon 44), Courmayeur (échantillon 20) et Contrex (échantillon 19) ont des valeurs très supérieures à la moyenne sur cette composante. Ces eaux sont naturellement riches en Ca, Mg et SO4, plutôt basiques ou alcalines (PH > 7) et plates.<br/>
+Un examen identique de la seconde composante révèle que les eaux Talians (échantillon 72), Hepar (échantillon 44), Courmayeur (échantillon 20) et Contrex (échantillon 19) ont des valeurs très supérieures à la moyenne sur cette composante. Ces eaux sont naturellement riches en Ca, Mg et SO4, plutôt basiques ou alcalines (PH > 7) et plates.  
 
-Enfin, les eaux Perrier (échantillon 58), Thonon (échantillon 74), Ste Marguerite (échantillon 68) et Badoit (échantillon 12) enregistrent les valeurs les plus élevées de la troisième composante. Ces eaux ont la particularité d’être fortement concentrées en NO3.<br/>
+Enfin, les eaux Perrier (échantillon 58), Thonon (échantillon 74), Ste Marguerite (échantillon 68) et Badoit (échantillon 12) enregistrent les valeurs les plus élevées de la troisième composante. Ces eaux ont la particularité d’être fortement concentrées en NO3.  
 
-L’ACP a donc permis de mettre en évidence des groupements de propriétés minérales propres à certains types d’eaux, difficilement perceptible au premier coup d’oeil.<br/>
+L’ACP a donc permis de mettre en évidence des groupements de propriétés minérales propres à certains types d’eaux, difficilement perceptible au premier coup d’oeil.  
 
 En résumé, la contribution des individus aux différents axes (par ordre décroissant de contribution) est la suivante :
 
@@ -450,14 +403,14 @@ Axe 2 : Talians, Hepar, Courmayeur, Contrex
  
 Axe 3 :  Perrier, Thonon, Ste Marguerite, Badoit
 
-##### <br/><u>Analyse croisée des variables et observations</u>
+####   *Analyse croisée des variables et observations*
 
 Le tracé des graphiques de répartion des eaux par Nature (plates, gazeuses) dans les différents plans considérés est présenté ci-contre. Il permet notamment de mettre en relation les variables quantitatives précédemment étudiées avec la variable qualitative Nature, en considérant les individus bien représentés seulement. 
 
 En rouge, sont désignées les observations de nature gazeuse; en noir, les observations de nature plate. 
 Les cercles de corrélations ici dessinés sont ceux issus de notre fonction ACP.
 
-```{r echo=FALSE, out.width='49%'}
+```{r echo=FALSE, out.width='49%', fig.cap="Répartition des eaux par nature"}
 acpn = function(data_in, round_precision = 3){  
   result = list()
   
@@ -578,25 +531,23 @@ for(i in rownames(acp_waters$comp)){
   water_type = c(water_type, v)
 }
 
-plot(main="Répartition des eaux par nature dans le plan 1-2", acp_waters$comp[,1], acp_waters$comp[,2], xlab = "Axe 1", ylab = "Axe 2", col=water_type)
+plot(main="Plan 1-2", acp_waters$comp[,1], acp_waters$comp[,2], xlab = "Axe 1", ylab = "Axe 2", col=water_type)
 legend(x = "bottomright",legend=unique(water_type),col=1:length(water_type),pch=1)
 
-plot(main="Répartition des eaux par nature dans le plan 1-3", acp_waters$comp[,1], acp_waters$comp[,3], xlab = "Axe 1", ylab = "Axe 3", col=water_type)
+plot(main="Plan 1-3", acp_waters$comp[,1], acp_waters$comp[,3], xlab = "Axe 1", ylab = "Axe 3", col=water_type)
 legend(x = "bottomright",legend=unique(water_type),col=1:length(water_type),pch=1)
 
-plot(main="Répartition des eaux par nature dans le plan 2-3", acp_waters$comp[,2], acp_waters$comp[,3], xlab = "Axe 2", ylab = "Axe 3", col=water_type)
+plot(main="Plan 2-3", acp_waters$comp[,2], acp_waters$comp[,3], xlab = "Axe 2", ylab = "Axe 3", col=water_type)
 legend(x = "bottomright",legend=unique(water_type),col=1:length(water_type),pch=1)
 
 ```
 
-<div style="text-align:center">Figure 8</div>
-<br/>
+  
 On remarque que c'est dans le plan 1-2 que la séparation entre eaux plates et gazeuses est la meilleure. Or, nous avons précédemment déduit que l'axe 1 était associé aux concentrations en Na, K, HCO3, Cl et Mg d'une part, et que les composants minéraux qui semblaient être les plus discriminants dans la distinction des eaux plates et gazeuses étaient le HCO3 et le Na d'autre part. L'analyse graphique est donc concordante avec les résultats de notre analyse.
-</div>
 
-####2.1.3. Analyse des observations supplémentaires
 
-<div style="text-align:justify">
+###2.1.3. Analyse des observations supplémentaires
+
 Les observations supplémentaires sont des eaux provenant du Maroc, exclusivement plates. Comparativement aux eaux françaises, les eaux marocaines sont plus riches en Na.
 
 ```{r echo=FALSE}
@@ -605,13 +556,13 @@ supp.waters
 summary(supp.waters)
 ```
 
-Parmi ces 11 observations supplémentaires, 4 enregistrent des valeurs manquantes, notamment au niveau de leur PH. Dans la mesure où nous avons précédemment vu que la distribution du PH s’apparente à celle d’une loi normale, on peut raisonnablement substituer ces valeurs manquantes par la valeur médiane de cette variable, qui vaut ici 7.0. Cela évite ainsi d’éliminer un tiers des observations supplémentaires.<br/>
+Parmi ces 11 observations supplémentaires, 4 enregistrent des valeurs manquantes, notamment au niveau de leur PH. Dans la mesure où nous avons précédemment vu que la distribution du PH s’apparente à celle d’une loi normale, on peut raisonnablement substituer ces valeurs manquantes par la valeur médiane de cette variable, qui vaut ici 7.0. Cela évite ainsi d’éliminer un tiers des observations supplémentaires.  
 
 Etant donné que nous n’avons pas réalisé d’estimation pour les données manquantes enregistrées au niveau de la variable Cl (cf. deuxième jeu de données), nous avons ici pris le parti de supprimer l’observation Ain Soltane (échantillon 89).
 Ces individus supplémentaires (ici en rouge) ont été représentés dans chacun des plans 1-2, 1-3 et 2-3.
 
 Les cercles de corrélations ont été ici ajoutés une nouvelle fois de façon à plus facilement superposer les résultats d'analyse.
-</div>
+
 
 ```{r echo=FALSE}
 new.supp.waters <- na.omit(supp.waters)
@@ -627,7 +578,7 @@ ligsup <- suprow(auto.acp,new.supp.waters[3:11])
 acpcos2sup <- ligsup$lisup^2/apply(ligsup$lisup^2, 1, sum)
 round(acpcos2sup[,1:3]*1000)
 ```
-<div style="text-align:justify">
+
 Seules les observations bien représentées peuvent être correctement analysées. L'observation #86 est, à titre d'exemple, très mal représentée, quel que soit le plan. Même chose pour l'observation #94 dans le plan 1-3. Nous nous focaliserons donc sur les autres observations.
 
 ```{r echo=FALSE, out.width="49%"}
@@ -654,21 +605,19 @@ s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Cercle des corrélations dans le 
 s.corcircle(auto.acp$co, xax=1, yax=3); mtext("Cercle des corrélations dans le plan 1-3")
 s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Cercle des corrélations dans le plan 2-3")
 ```
-<div style="text-align:center">Figure 9</div>
-<br/>
 
-<U>Interprétation :</U>
+*Interprétation :*
 
 On remarque que l'observation #88 (Oulmès) est une eau caractérisée par une forte concentration en HC03, Cl, K, Na et Mg. Cette eau se distingue des autres observations supplémentaires, isolée à la fois dans les plans 1-2 et 1-3. Si l'on jette un coup d'oeil au tableau d'analyse numérique inséré plus haut, on note en effet qu'elle enregistre des concentrations beaucoup plus importantes que les autres eaux pour les variables ici considérées.
 
 Dans le plan 1-3, on distingue un groupe défini par les observations #95, #90, #91 et #87 : ces eaux sont comparativement plus concentrées en NO3 que les autres. 
 
-Dans le plan 2-3, c'est l'eau <em>Ciel</em> (#94) qui se distingue, enregistrant de fortes concentrations en Na, K et Cl, ainsi que l'eau <em>Ain Saiss</em> (#87), qui enregistre la deuxième plus forte concentration en NO3.
-</div>
+Dans le plan 2-3, c'est l'eau *Ciel* (#94) qui se distingue, enregistrant de fortes concentrations en Na, K et Cl, ainsi que l'eau *Ain Saiss* (#87), qui enregistre la deuxième plus forte concentration en NO3.
+
 
 ##2.2. ACP sur le deuxième jeu de données
 
-<div style="text-align:justify">
+
 Nous considérons ici un deuxième jeu de données où les valeurs manquantes ne sont plus supprimées mais substituées/imputées par des valeurs approximatives.
 
 Pour ce faire, on peut utiliser l’algorithme des k plus proches voisins, déjà implémenté au sein du package DMwR. Pour chaque valeur manquante, l’algorithme identifie les k observations les plus proches en terme de distance euclidienne et en calcule la moyenne pondérée.
@@ -684,7 +633,7 @@ acp.variables <- new.active.waters[sapply(new.active.waters, is.numeric)] # On n
 new.auto.acp <- dudi.pca(df = acp.variables, center = TRUE, scale = TRUE, scannf = FALSE, nf = 3)
 ```
 
-On remarque par exemple que l'eau <em>Aquarelle</em>, originellement incomplète, a ici été imputée au niveau des variables K, Cl, SO4 et PH par les valeurs 1.01, 7.19, 20.67 et 7.12.
+On remarque par exemple que l'eau *Aquarelle*, originellement incomplète, a ici été imputée au niveau des variables K, Cl, SO4 et PH par les valeurs 1.01, 7.19, 20.67 et 7.12.
 
 Nous pouvons désormais appliquer notre ACP sur ce nouveau jeu de données, en suivant la même méthode. 
 
@@ -699,7 +648,7 @@ L'étude des valeurs propres selon le critère de Kaiser nous amène à conserve
 
 ####2.2.2. Projection des variables et observations dans un plan donné
 
-#####<u>Analyse des variables</u>
+#####Analyse des variables
 
 ```{r}
 round(new.auto.acp$co,3)
@@ -708,17 +657,17 @@ round(new.auto.acp$co,3)
 On remarque que les corrélations entre variables sont ici identiques à celles précédemment établies. Le tracé du cercle des corrélations vient confirmer la grande proximité des résultats obtenus dans ces deux ACP, en notant toutefois que la corrélation entre Mg et le premier groupe de variables distingué (Na, K, HCO3 et Cl) est plus marquée.
 
 
-```{r echo=FALSE, out.width='49%'}
-s.corcircle(new.auto.acp$co, xax=1, yax=2); mtext("Cercle des corrélations dans le plan 1-2")
-s.corcircle(new.auto.acp$co, xax=1, yax=3); mtext("Cercle des corrélations dans le plan 1-3")
-s.corcircle(new.auto.acp$co, xax=2, yax=3); mtext("Cercle des corrélations dans le plan 2-3")
+```{r echo=FALSE, out.width='49%',fig.show='hold', out.width="49%", fig.cap="Cercle des corrélations"}
+s.corcircle(new.auto.acp$co, xax=1, yax=2); mtext("Plan 1-2")
+s.corcircle(new.auto.acp$co, xax=1, yax=3); mtext("Plan 1-3")
+s.corcircle(new.auto.acp$co, xax=2, yax=3); mtext("Plan 2-3")
 ```
-<div style="text-align:center">Figure 10</div>
-<br/>
+
+  
 
 L'interprétation des axes est donc par conséquent la même.
 
-#####<u>Analyse des observations</u>
+#####Analyse des observations
 
 ```{r echo=FALSE}
 obs.inertie <- inertia.dudi(new.auto.acp, row.inertia=TRUE)
@@ -747,18 +696,18 @@ round(obs.qlt[30:50,1:3],3)
 round(obs.qlt[76,1:3],3)
 ```
 
-<B>Plan 1-2 :</B>
+**Plan 1-2 :**
 Parmi les individus imputés, les mieux représentés dans le plan 1-2 sont les eaux #4 (96,47%), #76 (94,44%), #45 (92,95%), #54 (92,07%), #35 (91,67%), #27 (91,30%). 
 
-<B>Plan 1-3 : </B>
+**Plan 1-3 : **
 Parmi les individus imputés, les mieux représentés dans le plan 1-3 sont les eaux #46 (96,82%), #45 (92,69%), #76 (89,06%) et #39 (86,46%). À l'inverse, l'individu imputé #5 est assez mal représenté dans ce plan (2,85%).
 
-<B>Plan 2-3 :</B>
+**Plan 2-3 :**
 Parmi les individus imputés, l'individu le mieux représenté dans le plan 2-3 est l'eau #13 (62,76%). Les individus imputés les moins bien représentés dans ce plan sont les eaux #45 (1,76%) et #43 (7,58%)
 
 De façon générale, les individus qui étaient bien représentés dans la première ACP le sont aussi ici; même chose du côté des individus mal représentés.
 
-<u>Contribution des observations aux axes :</u>
+*Contribution des observations aux axes :*
 
 De la même façon, nous nous intéresserons ici aux observations dont la contribution est supérieure à la contribution moyenne par axe, en portant notre attention sur les observations imputées avant tout.
 
@@ -769,32 +718,26 @@ round(obs.ctr[40:80,1:3],3)
 Les eaux Hydroxydase (échantillon 45) et Vichy St Yorre (échantillon 79) enregistrent les valeurs (absolues) de la première composante les plus élevées, en plus des eaux précédemment identifiées lors de la première ACP. Ces eaux sont naturellement riches en Na, K, Cl, HCO3 et éventuellement Mg, plutôt acides (PH < 7) et gazeuses. 
 
 Un examen identique de la seconde composante ne révèle aucune indication supplémentaire. Les eaux imputées ne contribuent pas à cet axe. Même remarque pour le troisième axe.
-</div>
-##### <br/><u>Analyse croisée des variables et observations</u>
-```{r echo=FALSE, out.width='49%'}
-s.label(new.auto.acp$li,xax=1,yax=2); mtext("Projection des observations dans le plan 1-2") 
-s.label(new.auto.acp$li,xax=1,yax=3); mtext("Projection des observations dans le plan 1-3") 
-```
-<br/>
-```{r echo=FALSE, out.width='49%', fig.align="center"}
-s.label(new.auto.acp$li,xax=2,yax=3); mtext("Projection des observations dans le plan 2-3") 
+
+####Analyse croisée des variables et observations
+```{r echo=FALSE, out.width='49%', fig.cap="Projection des observations", fig.align="center"}
+s.label(new.auto.acp$li,xax=1,yax=2); mtext("Plan 1-2") 
+s.label(new.auto.acp$li,xax=1,yax=3); mtext("Plan 1-3") 
+s.label(new.auto.acp$li,xax=2,yax=3); mtext("Plan 2-3") 
 ```
 
-<div style="text-align:center">Figure 11</div>
-
-<div style="text-align:justify">
-<br/>L'idée ici est d'analyser les individus qui ont fait l'objet d'une imputation.
+L'idée ici est d'analyser les individus qui ont fait l'objet d'une imputation.
 
 Comme on peut le voir dans le plan 1-2, l'eau Hydroxydase (échantillon 45) se distingue des autres échantillons de par ses fortes concentrations en Cl, HCO3, K, Mg et Na. C'est cette eau qui enregistre la plus haute composition en HCO3 (6722.2 mg/L) : c'est un outlier pour cette variable. L'eau Vichy St Yorre (échantillon 79) enregistre également de fortes concentrations pour ces variables, même si, dans une moindre mesure. Ces deux échantillons se distinguent facilement sur le premier graphique.
 
 L'interprétation liée aux projections des individus imputés sur les autres plans ne pourra pas être aussi concluante, dans la mesure où leur qualité de représentation n'est pas (ou moins) significative, exception faite de l'échantillon 45. 
 
 Cette étude s'est donc avérée enrichissante, dans la mesure où elle a permis de repositionner quelques individus préalablement non étudiés, bien que la qualité de représentation de la majorité d'entre eux, trop médiocre, a limité la portée de notre analyse.
-</div>
+
 
 ##2.3. ACP sur le troisième jeu de données
 
-<div style="text-align:justify">
+
 Nous considérons ici un troisième jeu de données, diminué des outliers. Ces individus, séparés des autres de par leurs valeurs "hors norme", ont été repérés un peu plus tôt au cours de notre analyse. 
 
 En voici un aperçu :
@@ -831,7 +774,7 @@ On obtient une inertie cumulée de 83,67%, ce qui est satisfaisant.
 
 ####2.3.2. Projection des variables et observations dans un plan donné
 
-#####<u>Analyse des variables</u>
+#####Analyse des variables
 
 ```{r}
 round(auto.acp$co,3)
@@ -847,32 +790,32 @@ Seule les corrélations mettant en jeu la variable Mg sont donc ici différentes
 
 Il semblerait également que cette configuration soit propice à une meilleure représentation de la variable PH, désormais plus proche du bord du cercle des corrélations dans les plans 1-3 et 2-3, comme on peut le voir ci-contre :
 
-```{r echo=FALSE, out.width='49%'}
-s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Cercle des corrélations dans le plan 1-2")
-s.corcircle(auto.acp$co, xax=1, yax=3); mtext("Cercle des corrélations dans le plan 1-3")
-s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Cercle des corrélations dans le plan 2-3")
+```{r echo=FALSE, out.width='49%', fig.cap="Cercle des corrélations", fig.align="center"}
+s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Plan 1-2")
+s.corcircle(auto.acp$co, xax=1, yax=3); mtext("Plan 1-3")
+s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Plan 2-3")
 ```
 
-<div style="text-align:center">Figure 12</div>
-<br/>
+<div style="text-align:center">Figure 12
+  
 
-<u>Interprétation des axes :</u>
+*Interprétation des axes :*
 
 * Axe 1 : cet axe est lié aux concentrations en K, HCO3, Na et Cl. Il caractérise la teneur sodique des eaux (riches en sodium ou non) ;
 * Axe 2 : cet axe est lié aux concentrations en Ca, Mg et SO4. Il caractérise la teneur minérale des eaux (fortement minéralisées ou non) ;
 * Axe 3 : cet axe est lié aux concentrations en NO3. Il caractérise le pouvoir nitrique des eaux (acides ou non).
-</div>
 
-#####<u>Analyse des observations</u>
 
-<div style="text-align:justify">
+#####Analyse des observations
+
+
 ```{r echo=FALSE}
 obs.inertie <- inertia.dudi(auto.acp, row.inertia=TRUE)
 obs.ctr <- obs.inertie$row.abs/100 
 obs.qlt <- obs.inertie$row.re/100
 ```
 
-<U>Qualité de représentation des observations :</U>
+*Qualité de représentation des observations :*
 
 La qualité de représentation des observations dans les différents plans est donnée par la commande `obs.inertie$row.re`.
 
@@ -880,16 +823,16 @@ La qualité de représentation des observations dans les différents plans est d
 round(obs.inertie$row.re,3)
 ```
 
-<B>Plan 1-2 :</B>
+**Plan 1-2 :**
 les individus les mieux représentés dans le plan 1-2 sont les eaux #19 (97,14%), #44 (95,32%), #40 (95,20%), #20 (95,19%) et #82 (93,4%)
 
-<B>Plan 1-3 : </B>
+**Plan 1-3 : **
 les individus les mieux représentés dans le plan 1-3 sont les eaux #10 (86,03%), #68 (84,56%), #57 (81,95%) et #70 (80,63%).
 
-<B>Plan 2-3 :</B>
+**Plan 2-3 :**
 les individus les mieux représentés dans le plan 2-3 sont les eaux #58 (82,73%), et, dans une moindre mesure, les eaux #12 (65,92%), #82 (62,71%) et #44 (61,90%).
 
-<u>Contribution des observations aux axes :</u>
+*Contribution des observations aux axes :*
 
 De façon analogue, nous nous intéresserons ici aux observations dont la contribution est supérieure à la contribution moyenne par axe.
 
@@ -897,19 +840,19 @@ De façon analogue, nous nous intéresserons ici aux observations dont la contri
 round(obs.ctr[,1:3],3)
 ```
 
-Les eaux Parot (échantillon 57), Vichy Celestins (échantillon 78), Rozana (échantillon 63), Courmayeur (échantillon 20) et Talians (échantillon 72) enregistrent les valeurs (absolues) de la première composante les plus élevées. Ces eaux sont naturellement riches en Na, K, HCO3, et Cl, plutôt acides (PH < 7) et gazeuses.<br/>
+Les eaux Parot (échantillon 57), Vichy Celestins (échantillon 78), Rozana (échantillon 63), Courmayeur (échantillon 20) et Talians (échantillon 72) enregistrent les valeurs (absolues) de la première composante les plus élevées. Ces eaux sont naturellement riches en Na, K, HCO3, et Cl, plutôt acides (PH < 7) et gazeuses.  
 
-Un examen identique de la deuxième composante révèle que les eaux Talians (échantillon 72), Perrier (échantillon 58), Rozana (échantillon 63), Courmayeur (échantillon 20), Volvic (échantillon 82) ont des valeurs très supérieures à la moyenne sur cette composante. Ces eaux sont naturellement riches en Ca, Mg et SO4, plutôt basiques ou alcalines (PH > 7) et plates.<br/>
+Un examen identique de la deuxième composante révèle que les eaux Talians (échantillon 72), Perrier (échantillon 58), Rozana (échantillon 63), Courmayeur (échantillon 20), Volvic (échantillon 82) ont des valeurs très supérieures à la moyenne sur cette composante. Ces eaux sont naturellement riches en Ca, Mg et SO4, plutôt basiques ou alcalines (PH > 7) et plates.  
 
-Enfin, les eaux Perrier (échantillon 58), Ste Marguerite (échantillon 68) et Abatilles (échantillon 1) enregistrent les valeurs les plus élevées de la troisième composante. Ces eaux ont la particularité d’être ou bien acides et très fortement concentrées en NO3, ou bien basique et très faiblement concentrées en NO3 (les variables PH et NO3 sont anti-corrélées).<br/>
+Enfin, les eaux Perrier (échantillon 58), Ste Marguerite (échantillon 68) et Abatilles (échantillon 1) enregistrent les valeurs les plus élevées de la troisième composante. Ces eaux ont la particularité d’être ou bien acides et très fortement concentrées en NO3, ou bien basique et très faiblement concentrées en NO3 (les variables PH et NO3 sont anti-corrélées).  
 
 Les analyses ici faites sont donc sensiblement les mêmes que celles que nous avions obtenues lors de nos précédentes ACP, à la différence près que l'anti-corrélation existante entre les variables NO3 et PH apparaît ici comme plus marquée. Autre point sur laquelle cette ACP diffère : la corrélation entre la variable Mg et la deuxième composante, plus marquée qu'auparavant, bien que cette différenciation ne soit pas unanime pour tous les échantillons.
 
 Cette ACP aura donc surtout permis de mettre en évidence l'anti-corrélation très marqué entre le PH d'une eau et sa concentration en NO3.
-</div>
+
 
 ####2.3.3. Analyse des observations supplémentaires
-<div style="text-align:justify">
+
 L’idée ici est d’analyser les observations de type "outlier" ayant été soustraites des individus actifs.  
   
 En étudiant ceux qui contribuaient le plus aux axes dans le contexte de la première analyse, on observe que leurs qualités de représentation étaient très concentrées sur un seul axe. Par exemple les individus 22, 37, 38 et 84 contribuaient tous à plus de 78% au premier axe. On peut ainsi comparer avec les nouvelles valeurs, issues de l'analyse actuelle : 
@@ -923,7 +866,7 @@ round(qualites[c(4,15,16,32),]*1000)/10
 
 On peut voir que désormais, les qualités dont bien plus réparties sur les trois axes. La forte influence de certains individus sur un axe en particulier, due à leurs valeurs extrêmes est le biais que nous souhaitions réduire. On peut donc confirmer qu'il a été absorbé.  
 
-```{r, echo=FALSE, fig.width=9, fig.height=7, fig.show='hold', out.width="49%"}
+```{r, echo=FALSE, fig.width=9, fig.height=7, fig.show='hold', out.width="49%", fig.cap="Projection des individus actifs (noirs) et supplémentaires (rouges)"}
 cl1 <- auto.acp$li[,1]
 cl2 <- auto.acp$li[,2]
 cl3 <- auto.acp$li[,3]
@@ -931,29 +874,28 @@ csup1 <- outliers.acp$lisup[,1]
 csup2 <- outliers.acp$lisup[,2]
 csup3 <- outliers.acp$lisup[,3]
 # Graphe des observations actives et supplémentaires - plan 1-2
-plot(cl1, cl2, type="n", main="Projection des individus actifs (noirs) et supplémentaires (rouges) dans le plan 1-2")
+plot(cl1, cl2, type="n", main="Plan 1-2")
 abline(h=0,v=0)
 text(cl1, cl2, row.names(auto.acp$li))
-text(csup1, csup2, row.names(outliers.acp$lisup), col="red", cex=1.2)
+text(csup1, csup2, row.names(outliers.acp$lisup), col="red", cex=1.2,)
 
 # Graphe des observations actives et supplémentaires - plan 1-3
-plot(cl1, cl3, type="n", main="Projection des individus actifs (noirs) et supplémentaires (rouges) dans le plan 1-3")
+plot(cl1, cl3, type="n", main="Plan 1-3")
 abline(h=0,v=0)
 text(cl1, cl3, row.names(auto.acp$li))
 text(csup1, csup3, row.names(outliers.acp$lisup), col="red", cex=1.2)
 # Graphe des observations actives et supplémentaires - plan 2-3
-plot(cl2, cl3, type="n", main="Projection des individus actifs (noirs) et supplémentaires (rouges) dans le plan 2-3")
+plot(cl2, cl3, type="n", main="Plan 2-3")
 abline(h=0,v=0)
 text(cl2, cl3, row.names(auto.acp$li))
 text(csup2, csup3, row.names(outliers.acp$lisup), col="red", cex=1.2)
 ```
-<div style="text-align:center">Figure 13</div>
 En représentant toutes les observations, on peut voir que les individus supplémentaires ont des positions plus équilibrées ce qui confirme cette observation.
-</div>
+
 
 ##2.4. Classification non supervisée de type k-means
 
-<div style="text-align:justify">
+
 Pour approfondir notre analyse, on peut choisir de classer nos individus par catégories, par classes. Ainsi, on pourrait voir apparaître différents types d'eau dans nos données.  
   
 Plusieurs méthodes s'offrent à nous. Cependant, nous n'avons pas vraiment de types d'eaux prédéfinis, ni de données d'entraînement sur lesquelles s'appuyer : le choix d'une méthode de partitionnement non supervisée semble donc raisonnable.  
@@ -966,7 +908,7 @@ Un nombre classique de classes est $\sqrt{2/n}$, notre n étant le nombre d'indi
   
 Quand on applique l'algorithme, il nous renvoie la somme des carrées des distances entre les individus et le centre des classes. Une part plus petite par rapport à la somme de toutes les distances étant meilleure, on peut dessiner le graphique de cette part, en fonction de k. En observant les décrochages de la courbe, on peut alors décider d'un k satisfaisant.  
   
-```{r echo=FALSE, fig.align='center', fig.cap="Figure 14"}
+```{r echo=FALSE, fig.align='center', fig.cap="Qualité de la classification en fonction du nombre de classes"}
 data = na.omit(waters[sapply(waters, is.numeric)])
 
 set.seed(3)
@@ -977,20 +919,19 @@ values = sapply(2:10, function(k){
   curr$tot.withinss/curr$totss*100
 })
 
-plot(2:10,values, type="b", xlab="Nombre de clusters", ylab = "Part des distances entre individus et centre des classes", main="Qualité de la classification en fonction du nombre de classes")
+plot(2:10,values, type="b", xlab="Nombre de clusters", ylab = "Part des distances entre individus et centre des classes", main=" ")
 
 ```
-  
-<br/>Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire. On préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
+Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire. On préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
   
 Le graphique montre qu'à k=5, la qualité de représentation ne progresse plus beaucoup; 5 semble donc être un choix raisonnable. Une fois executé, l'algorithme nous revoie un tableau des individus classés.
 
-```{r echo=FALSE, fig.align='center', fig.cap="Figure 15",echo=FALSE,fig.show='hold', out.width="49%"}
+```{r echo=FALSE, fig.align='center', fig.cap="Représentation des individus classés",echo=FALSE,fig.show='hold', out.width="49%"}
 acp = dudi.pca(data, scannf = FALSE, nf=3)
 
-plot(acp$li[,1], acp$li[,2], xlab = "Axe 1", ylab = "Axe 2", type="n", main="Représentation des individus classés en deux dimensions (Plan 1-2)")
+plot(acp$li[,1], acp$li[,2], xlab = "Axe 1", ylab = "Axe 2", type="n", main="Plan 1-2")
 text(x=acp$li[,1], y=acp$li[,2], labels = row.names(acp$li), col=unname(classi$cluster))
-plot(acp$li[,2], acp$li[,3], xlab = "Axe 2", ylab = "Axe 3", type="n", main="Représentation des individus classés en deux dimensions (Plan 2-3)")
+plot(acp$li[,2], acp$li[,3], xlab = "Axe 2", ylab = "Axe 3", type="n", main="Plan 2-3")
 text(x=acp$li[,2], y=acp$li[,3], labels = row.names(acp$li), col=unname(classi$cluster))
 ```
 
@@ -998,7 +939,7 @@ En appliquant les résultats de ce tableau sur une représentation issue de l'AC
   
 Ainsi, les résultats de notre analyse en composantes principales et de notre classification sont cohérents l'un par rapport à l'autre.
 
-</div>
+
 
 ## Conclusion
 
@@ -1012,9 +953,9 @@ Cette méthode d’analyse exploratoire des données a donc entre autres permis 
 
 ## Code source
 
-<br/><U>ACP "automatique"</U>
+  *ACP "automatique"*
 
-<pre><code>
+``` {r eval=FALSE}
 # Importation du jeu de données
 waters <- read.table("/home/sol/Téléchargements/Eaux2018 FM.txt", header=TRUE, sep="\t")
 attach(waters)
@@ -1275,11 +1216,11 @@ plot(axe2, axe3, type="n", main="Individus actifs et supplémentaires dans le pl
 abline(h=0,v=0)
 text(axe2, axe3, row.names(auto.acp$li))
 text(csup2, csup3, row.names(ligsup$lisup), col="red", cex=1.2)
-</code></pre>
+```
 
-<br/><U>ACP "manuelle"</U>
+  *ACP "manuelle"*
 
-<pre><code>
+``` {r eval=FALSE}
 library(plotrix)
 library(ade4)
 
@@ -1424,11 +1365,11 @@ legend(x = "bottomright",legend=unique(water_type),col=1:length(water_type),pch=
 dudi = dudi.pca(df = acp_waters$raw_data, scannf = FALSE, nf = 3)
 
 acp_waters$matrix[setdiff(c(1:nrow(acp_waters$matrix)), unique(unlist(apply(acp_waters$matrix, 2, function(x){which(x %in% boxplot.stats(x)$out)})))),]
-</code></pre>
+```
 
-<br/><U>Classification non supervisée (K-Means)</U>
+  *Classification non supervisée (K-Means)*
 
-<pre><code>
+``` {r eval=FALSE}
 waters <- read.table("./Eaux2018 FM.txt", header=TRUE, sep="\t")
 data = na.omit(waters[sapply(waters, is.numeric)])
 library(ade4)
@@ -1460,7 +1401,7 @@ library(rgl)
 open3d()
 plot3d(acp$li[,1], acp$li[,2], acp$li[,3], "Axe 1", "Axe 2", "Axe 3",col=unname(classi$cluster), type = "s", size=0.2)
 text3d(acp$li[,1], acp$li[,2], acp$li[,3], texts=row.names(acp$li) ,adj = 0, col=unname(classi$cluster), family="serif", font=5, cex=1)
-</code></pre>
+```
 
-<br/>
+  
  
