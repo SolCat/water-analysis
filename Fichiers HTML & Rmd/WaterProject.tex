@@ -429,7 +429,7 @@ variables Pays et Nature.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{mosaicplot}\NormalTok{(}\OperatorTok{~}\NormalTok{waters}\OperatorTok{$}\NormalTok{Pays}\OperatorTok{+}\NormalTok{waters}\OperatorTok{$}\NormalTok{Nature, }\DataTypeTok{data=}\NormalTok{waters, }\DataTypeTok{main=}\StringTok{"Répartition des eaux par Pays et Nature"}\NormalTok{, }\DataTypeTok{color=}\OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{mosaicplot}\NormalTok{(}\OperatorTok{~}\NormalTok{waters}\OperatorTok{$}\NormalTok{Pays}\OperatorTok{+}\NormalTok{waters}\OperatorTok{$}\NormalTok{Nature, }\DataTypeTok{data=}\NormalTok{waters, }\DataTypeTok{color=}\OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -439,7 +439,7 @@ variables Pays et Nature.
 
 }
 
-\caption{Figure 1}\label{fig:unnamed-chunk-7}
+\caption{Répartition des eaux par Pays et Nature}\label{fig:unnamed-chunk-7}
 \end{figure}
 
  Comme on peut le voir, les eaux gazeuses sont exclusivement françaises
@@ -829,15 +829,15 @@ le plan (axe2, axe3).
 
 Figure 7
 
-Le premier plan principal permet de distinguer 2 groupes de variables
-distincts, tels que décrits plus haut : Na, K, HCO3, Cl et Mg d'une
-part, Ca et SO4 d'autre part. Les variables NO3 et PH sont assez mal
-représentées dans ce plan (éloignées du bord du cercle de corrélation),
-à la différence des plans 1-3 et 2-3 où leur représentation est bonne.
-L'existence de corrélations négatives entre ces deux variables est
-facilement visualisable dans ces configurations. La conservation des
-trois premiers axes est donc ici nécessaire si l'on ne souhaite pas
-aboutir à de mauvaises interprétations.
+Les plans 1-2 et 1-3 permettent permettent de distinguer 2 groupes de
+variables distincts, tels que décrits plus haut : Na, K, HCO3, Cl et Mg
+d'une part, Ca et SO4 d'autre part. Les variables NO3 et PH sont assez
+mal représentées dans ce plan (éloignées du bord du cercle de
+corrélation), à la différence des plans 1-3 et 2-3 où leur
+représentation est bonne. L'existence de corrélations négatives entre
+ces deux variables est facilement visualisable dans ces configurations.
+La conservation des trois premiers axes est donc ici nécessaire si l'on
+ne souhaite pas aboutir à de mauvaises interprétations.
 
 Interprétation des axes :
 
@@ -928,7 +928,7 @@ Courmayeur (1,23\%), Talians (2,45\%), Hepar (2,60\%) et Salvetat
 (5,92\%)
 
 Plan 2-3 : les individus les mieux représentés dans le plan 2-3 sont les
-eaux Contrex (98,18\%), Courmayeur (96,65\%), Talians (96,51\%), 44
+eaux Contrex (98,18\%), Courmayeur (96,65\%), Talians (96,51\%), Hépar
 (96,22\%) et Perrier (92,85\%). Les individus les moins bien représentés
 dans le plan 2-3 sont les eaux Rozana (1,31\%), Chateldon (3,36\%),
 Christalline Aurelie (4,24\%), Christalline St JB (4,86\%) et Arvie
@@ -1243,7 +1243,7 @@ retenus}\label{selection-des-axes-et-plans-retenus-1}}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.225 1.903 1.149 0.712 0.482 0.268 0.190 0.068 0.003
+## [1] 4.224 1.903 1.150 0.712 0.481 0.268 0.190 0.068 0.003
 \end{verbatim}
 
 \begin{Shaded}
@@ -1253,7 +1253,7 @@ retenus}\label{selection-des-axes-et-plans-retenus-1}}
 \end{Shaded}
 
 \begin{verbatim}
-## [1]  46.945  68.087  80.857  88.771  94.122  97.095  99.207  99.963 100.000
+## [1]  46.939  68.082  80.858  88.770  94.120  97.094  99.206  99.963 100.000
 \end{verbatim}
 
 L'étude des valeurs propres selon le critère de Kaiser nous amène à
@@ -1274,15 +1274,15 @@ donné}\label{projection-des-variables-et-observations-dans-un-plan-donne-1}}
 
 \begin{verbatim}
 ##       Comp1  Comp2  Comp3
-## Ca   -0.341  0.880  0.073
-## Mg   -0.825  0.337  0.077
-## Na   -0.906 -0.245 -0.118
+## Ca   -0.341  0.880  0.074
+## Mg   -0.825  0.337  0.078
+## Na   -0.906 -0.244 -0.119
 ## K    -0.935 -0.213 -0.099
 ## Cl   -0.786 -0.104  0.002
-## NO3   0.136 -0.015  0.856
-## SO4  -0.114  0.931 -0.081
+## NO3   0.137 -0.016  0.856
+## SO4  -0.114  0.931 -0.080
 ## HCO3 -0.941 -0.150 -0.039
-## PH    0.445  0.095 -0.611
+## PH    0.444  0.097 -0.612
 \end{verbatim}
 
 On remarque que les corrélations entre variables sont ici identiques à
@@ -1333,45 +1333,45 @@ Les qualités sont résumées dans la table ci-contre :
 \begin{verbatim}
 ##     Axis1  Axis2  Axis3
 ## 4   0.840 -0.125 -0.006
-## 5  -0.009  0.246  0.020
-## 6   0.809 -0.073  0.041
-## 7   0.589 -0.204 -0.001
+## 5  -0.008  0.246  0.020
+## 6   0.809 -0.073  0.040
+## 7   0.590 -0.204 -0.001
 ## 8  -0.515  0.000  0.081
-## 9   0.142 -0.539  0.065
-## 10 -0.821 -0.023 -0.013
+## 9   0.143 -0.540  0.063
+## 10 -0.821 -0.023 -0.012
 ## 11 -0.331  0.034  0.058
 ## 12 -0.099  0.017  0.751
-## 13 -0.105  0.377  0.250
+## 13 -0.105  0.378  0.250
 \end{verbatim}
 
 \begin{verbatim}
 ##     Axis1  Axis2  Axis3
-## 30  0.674 -0.031 -0.002
-## 31  0.392 -0.107 -0.368
-## 32  0.250 -0.106 -0.378
-## 33 -0.005 -0.038  0.242
-## 34  0.493 -0.190  0.210
+## 30  0.673 -0.031 -0.003
+## 31  0.391 -0.106 -0.369
+## 32  0.249 -0.105 -0.380
+## 33 -0.005 -0.039  0.242
+## 34  0.494 -0.191  0.209
 ## 35  0.712 -0.204 -0.001
-## 36  0.618 -0.143 -0.219
-## 37  0.679 -0.019 -0.201
-## 38  0.679 -0.020 -0.201
-## 39  0.804 -0.062  0.061
-## 40  0.266 -0.004  0.277
-## 41  0.724 -0.042  0.025
-## 42  0.726 -0.086 -0.013
-## 43 -0.831 -0.064 -0.012
+## 36  0.617 -0.142 -0.221
+## 37  0.677 -0.019 -0.203
+## 38  0.678 -0.019 -0.203
+## 39  0.805 -0.062  0.059
+## 40  0.266 -0.004  0.275
+## 41  0.724 -0.042  0.024
+## 42  0.726 -0.085 -0.013
+## 43 -0.831 -0.063 -0.012
 ## 44 -0.021  0.958  0.000
 ## 45 -0.919 -0.010 -0.008
-## 46  0.479  0.009 -0.490
-## 47  0.611 -0.221  0.002
-## 48  0.515 -0.089 -0.369
-## 49  0.524 -0.048 -0.261
-## 50  0.574 -0.184 -0.042
+## 46  0.478  0.009 -0.491
+## 47  0.611 -0.222  0.002
+## 48  0.514 -0.089 -0.371
+## 49  0.523 -0.047 -0.263
+## 50  0.574 -0.184 -0.043
 \end{verbatim}
 
 \begin{verbatim}
 ##    Axis1  Axis2 Axis3
-## 76 0.852 -0.092 0.039
+## 76 0.853 -0.092 0.038
 \end{verbatim}
 
 Plan 1-2 : Parmi les individus imputés, les mieux représentés dans le
@@ -1415,16 +1415,16 @@ portant notre attention sur les observations imputées avant tout.
 ## 46 0.003 0.000 0.013
 ## 47 0.005 0.004 0.000
 ## 48 0.007 0.003 0.018
-## 49 0.008 0.002 0.014
+## 49 0.008 0.002 0.015
 ## 50 0.005 0.003 0.001
 ## 51 0.005 0.003 0.004
 ## 52 0.003 0.005 0.012
-## 53 0.003 0.002 0.000
+## 53 0.003 0.002 0.001
 ## 54 0.004 0.003 0.001
 ## 55 0.006 0.001 0.014
 ## 56 0.000 0.004 0.000
 ## 57 0.043 0.008 0.004
-## 58 0.002 0.000 0.382
+## 58 0.002 0.000 0.381
 ## 59 0.003 0.000 0.001
 ## 60 0.001 0.002 0.001
 ## 61 0.014 0.002 0.012
@@ -1438,7 +1438,7 @@ portant notre attention sur les observations imputées avant tout.
 ## 69 0.005 0.003 0.004
 ## 70 0.000 0.020 0.017
 ## 71 0.002 0.005 0.007
-## 72 0.001 0.227 0.006
+## 72 0.001 0.227 0.005
 ## 73 0.003 0.000 0.005
 ## 74 0.005 0.000 0.063
 ## 75 0.002 0.007 0.000
@@ -1778,6 +1778,36 @@ supplémentaires}\label{analyse-des-observations-supplementaires-1}}
 L'idée ici est d'analyser les observations de type ``outlier'' ayant été
 soustraites des individus actifs.
 
+En étudiant ceux qui contribuaient le plus aux axes dans le contexte de
+la première analyse, on observe que leurs qualités de représentation
+étaient très concentrées sur un seul axe. Par exemple les individus 22,
+37, 38 et 84 contribuaient tous à plus de 78\% au premier axe. On peut
+ainsi comparer avec les nouvelles valeurs, issues de l'analyse actuelle
+:
+
+\begin{verbatim}
+##    Axis1 Axis2 Axis3
+## 22  46.1  40.1  13.8
+## 37  44.2  34.9  20.9
+## 38  44.1  34.9  20.9
+## 84  36.2  46.4  17.3
+\end{verbatim}
+
+On peut voir que désormais, les qualités dont bien plus réparties sur
+les trois axes. La forte influence de certains individus sur un axe en
+particulier, due à leurs valeurs extrêmes est le biais que nous
+souhaitions réduire. On peut donc confirmer qu'il a été absorbé.
+
+\includegraphics[width=0.49\linewidth]{WaterProject_files/figure-latex/unnamed-chunk-53-1}
+\includegraphics[width=0.49\linewidth]{WaterProject_files/figure-latex/unnamed-chunk-53-2}
+\includegraphics[width=0.49\linewidth]{WaterProject_files/figure-latex/unnamed-chunk-53-3}
+
+Figure 13
+
+En représentant toutes les observations, on peut voir que les individus
+supplémentaires ont des positions plus équilibrées ce qui confirme cette
+observation.
+
 \hypertarget{classification-non-supervisee-de-type-k-means}{\subsection{2.4.
 Classification non supervisée de type
 k-means}\label{classification-non-supervisee-de-type-k-means}}
@@ -1817,11 +1847,11 @@ satisfaisant.
 
 \begin{figure}
 
-{\centering \includegraphics{WaterProject_files/figure-latex/unnamed-chunk-52-1} 
+{\centering \includegraphics{WaterProject_files/figure-latex/unnamed-chunk-54-1} 
 
 }
 
-\caption{Figure 13}\label{fig:unnamed-chunk-52}
+\caption{Figure 14}\label{fig:unnamed-chunk-54}
 \end{figure}
 
 Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire.
@@ -1830,20 +1860,51 @@ mêmes résultats.
 
 Le graphique montre qu'à k=5, la qualité de représentation ne progresse
 plus beaucoup; 5 semble donc être un choix raisonnable. Une fois
-executé, l'algorithme nous revoie un tableau des individus classés. On
-peut donc, pour se donner une idée, appliquer ce tableau à une
-représentation en deux ou trois dimensions issue de l'ACP.
+executé, l'algorithme nous revoie un tableau des individus classés.
 
 \begin{figure}
 
-{\centering \includegraphics{WaterProject_files/figure-latex/unnamed-chunk-53-1} 
+{\centering \includegraphics[width=0.49\linewidth]{WaterProject_files/figure-latex/unnamed-chunk-55-1} \includegraphics[width=0.49\linewidth]{WaterProject_files/figure-latex/unnamed-chunk-55-2} 
 
 }
 
-\caption{Figure 14}\label{fig:unnamed-chunk-53}
+\caption{Figure 15}\label{fig:unnamed-chunk-55}
 \end{figure}
 
+En appliquant les résultats de ce tableau sur une représentation issue
+de l'ACP, on peut observer que la classification groupe bien des
+individus similaires, c'est à dire proches les uns des autres même quand
+on réduit les dimensions. Si deux classes semblent se mélanger (bleue et
+rouge) sur le plan 1-2, on peut confirmer leur distinction avec une
+autre dimension (plan 2-3).
+
+Ainsi, les résultats de notre analyse en composantes principales et de
+notre classification sont cohérents l'un par rapport à l'autre.
+
 \hypertarget{conclusion}{\subsection{Conclusion}\label{conclusion}}
+
+Les différentes ACP mises en oeuvres ont tout d'abord permis de dégager
+des groupes de variables traduisant des similarités de comportements,
+c'est-à-dire évoluant dans le même sens. Trois grands ensembles ont
+ainsi pu être mis en avant, tel que celui défini par les variables PH et
+NO3, semblant ici indiquer qu'une eau à faible PH (acide) est
+généralement fortement concentrée en NO3 et inversement.Ces analyses ont
+ensuite facilité le regroupement d'observations partageant des
+caractéristiques communes. La première ACP, réalisée sur les données
+brutes, a par exemple révélé que les eaux Talians, Hépar, Courmayeur et
+Contrex étaient des eaux riches en calcium et en magnésium.
+
+Cette méthode d'analyse exploratoire des données a donc entre autres
+permis de dresser une typologie des eaux, les différenciant sur base de
+leur composition minérale. Ce ``typage'' trouve notamment écho dans le
+domaine de la santé, où la consommation en eau doit être adaptée tant à
+l'âge qu'aux situations. Mener une ACP dans ce contexte a donc tout son
+intérêt. Mais la qualité du jeu de données utilisé en entrée peut
+conditionner et éventuellement dégrader la qualité des résultats obtenus
+en sortie. Neutraliser le nombre important de données manquantes et
+extrêmes est donc un travail préliminaire essentiel visant en partie à
+répondre à cet aléa, bien qu'il ne soit jamais possible de s'en
+affranchir complètement.
 
 \begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 

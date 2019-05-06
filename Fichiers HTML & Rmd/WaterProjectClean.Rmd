@@ -139,12 +139,16 @@ Ces résumés nous indiquent que les eaux gazeuses sont en moyenne plus riches q
 
 En termes de répartition des échantillons, on remarque que les eaux plates sont en quantité supérieure, représentant à peu près 2/3 du jeu de données. C'est le diagramme en mosaïque (mosaic plot) qui nous permet d'aboutir à de telles conclusions, en faisant la représentation des effectifs relatifs à un tableau de contingence, ici défini par les variables Pays et Nature. 
 
-```{r fig.cap="Répartition des eaux par Pays et Nature", out.width="70%", fig.align='center'}
+Comme on peut le voir Figure 1, les eaux gazeuses sont exclusivement françaises : il n'y a pas d'eaux marocaines gazeuses. On peut aussi relever que les eaux marocaines sont très peu représentées vis-à-vis des eaux françaises, raison pour laquelle elles sont sans doute traitées dans cette analyse comme des observations supplémentaires. 
+
+
+```{r}
 table(waters$Nature, waters$Pays) 
-mosaicplot(~waters$Pays+waters$Nature, data=waters, main="", color=TRUE)
 ```
 
-Comme on peut le voir, les eaux gazeuses sont exclusivement françaises : il n'y a pas d'eaux marocaines gazeuses. On peut aussi relever que les eaux marocaines sont très peu représentées vis-à-vis des eaux françaises, raison pour laquelle elles sont sans doute traitées dans cette analyse comme des observations supplémentaires.  
+```{r fig.cap="Répartition des eaux par Pays et Nature", fig.align='center'}
+mosaicplot(~waters$Pays+waters$Nature, data=waters, main="", color=TRUE)
+```
 
 ###1.2.3. Analyse unidimensionnelle : variables quantitatives
 
@@ -169,18 +173,18 @@ Un examen plus fin, variable par variable, nous permettra de mieux apprécier le
 
 Le tracé de la boîte à moustache de la variable PH laisse apparaître une distribution symétrique. On note que les valeurs de sa moyenne (6.905) et sa médiane (7.000) sont très proches. Sa distribution, homogène et faiblement dispersée, semble s’approcher de celle d’une loi Normale (voire figure ci-contre).
 
-```{r echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', out.width="49%", fig.cap="Variable PH"}
+```{r echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', out.width="40%", fig.cap="Variable PH"}
 boxplot(waters$PH, main="Boîte à moustache de la variable PH")
 hist(waters$PH, prob=TRUE, main="Histogramme et densité de probabilité du PH", xlab="PH")
 curve(dnorm(x, mean=mean(waters$PH, na.rm=TRUE), sd=sd(waters$PH, na.rm=TRUE)), add=TRUE, col="red")
 ```
-L'histogramme du PH, approché par une courbe de densité en forme de "cloche", vient confirmer cette hypothèse (voir figure ci-contre).
+L'histogramme du PH, approché par une courbe de densité en forme de "cloche", vient confirmer cette hypothèse (Figure 3).
 
 ####Etude de la variable NO3
 
-La distribution de la variable NO3 est ici quelque peu différente : l’histogramme indique une distribution non-symétrique et non-homogène.
+La distribution de la variable NO3 est ici quelque peu différente : l’histogramme indique une distribution non-symétrique et non-homogène (Figure 4).
 
-```{r echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', out.width="49%",fig.cap="Variable NO3"}
+```{r echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', out.width="40%", fig.cap="Variable NO3"}
 boxplot(waters$NO3, main="Boîte à moustache de la variable NO3")
 hist(waters$NO3, prob=TRUE, main="Histogramme et densité de probabilité du NO3", xlab="NO3")
 curve(dnorm(x, mean=mean(waters$NO3, na.rm=TRUE), sd=sd(waters$NO3, na.rm=TRUE)), add=TRUE, col="red")
@@ -189,9 +193,9 @@ Le tracé de la boîte à moustache de cette variable révèle la présence de n
 
 ####Etude des variables Cl, K, SO4 et HCO3 :
 
-Les variables Cl, K, SO4 et HCO3 témoignent d’une distribution à nouveau non symétrique, peu homogène, enregistrant un grand nombre de valeurs extrêmes. Le tracé de leur densité de probabilité s’éloigne ici d’une loi normale. 
+Les variables Cl, K, SO4 et HCO3 témoignent d’une distribution à nouveau non symétrique, peu homogène, enregistrant un grand nombre de valeurs extrêmes (Figure 5). Le tracé de leur densité de probabilité s’éloigne ici d’une loi normale. 
 
-```{r echo=FALSE, fig.height=7, fig.width=11, out.width="100%", fig.align='center', fig.cap="Histogrammes et desités"}
+```{r echo=FALSE, fig.height=7, fig.width=11, out.width="100%", fig.align='center', fig.cap="Histogrammes et densités"}
 par(mfrow=c(2,2))
 hist(waters$Cl, prob=TRUE, main="Histogramme et densité de probabilité du Cl", xlab="Cl")
 curve(dnorm(x, mean=mean(waters$Cl, na.rm=TRUE), sd=sd(waters$Cl, na.rm=TRUE)), add=TRUE, col="red")
@@ -221,25 +225,23 @@ La commande which permet d’identifier les indices des outliers :
 which(waters$SO4 %in% boxplot.stats(waters$SO4)$out)
 ```
   
-Les outliers sont donc très présents dans ce jeu de données. Il pourrait ainsi être judicieux de générer un deuxième jeu de données sans ces extrema, ou en tout cas essayer de s'en affranchir autant que faire se peut, de façon à ne pas biaiser la suite de notre étude. Passer ces données en observations supplémentaires dans le cadre de notre ACP est une façon de neutraliser ces valeurs.
+Les outliers sont donc très présents dans ce jeu de données. Il pourrait ainsi être judicieux de générer un deuxième jeu de données sans ces extrema, ou en tout cas essayer de s'en affranchir autant que faire se peut, de façon à ne pas biaiser la suite de notre étude. Passer ces données en observations supplémentaires dans le cadre de notre ACP est une façon de neutraliser ces valeurs. </br>
 
 
  
 ###1.2.5. Analyse bidimensionnelle
 
 Intéressons-nous désormais à l'analyse bidimensionnelle. L’objectif ici est de pouvoir mettre en évidence, pour chaque paire de variables considérée, l’existence de variations simultanées, aussi appelées liaisons. 
-La matrice des scatterplots permet de visualiser les liaisons existantes entre variables quantitatives prises deux à deux. 
-
-```{r echo=FALSE, fig.align='center', fig.cap="Nuage de points croisant deux à deux les variables du jeu de données"}
-plot(waters[sapply(waters, is.numeric)], main="")
-```
+La matrice des scatterplots permet de visualiser les liaisons existantes entre variables quantitatives prises deux à deux (Figure 6). 
 
 On observe ainsi graphiquement l’existence de corrélations entre les variables Na, K et HCO3. Cette hypothèse peut être vérifiée via l’étude numérique des corrélations inter-variables (`commande cor`).
 
 ```{r, fig.align='center'}
 round(cor(waters[sapply(waters, is.numeric)], use="complete.obs"),3)
 ```
-
+```{r echo=FALSE, fig.align='center', fig.cap="Nuage de points croisant deux à deux les variables du jeu de données", out.width="49%"}
+plot(waters[sapply(waters, is.numeric)], main="")
+```
 Les variables les plus corrélées positivement sont les variables HCO3 et NA (0.910), HCO3 et K (0.883) et Na et K (0.867) : elles varient simultanément de façon semblable.  
   
 On remarque que le PH est corrélé négativement à toutes les autres variables, exception faite du composant S04. Le comportement de cette variable est donc, de façon générale, opposé à celui des autres variables.  
@@ -328,7 +330,7 @@ On remarque que :
 
 NB : On note que la variabilité des six dernières composantes principales (non retenues ici) est beaucoup plus faible que celle des composantes retenues. Autrement dit, la distance qu’elles traduisent entre les observations est négligeable.  
 
-Le tracé du cercle des corrélations peut nous aider à apprécier ces corrélations, ainsi que la bonne représentation des différentes variables (proximité vis-à-vis du bord du cercle). Dans la mesure où l’on a décidé ici de retenir 3 axes, il faut alors tracer trois graphiques distincts pour chaque nuage : le nuage projeté sur le plan (axe1, axe2), celui projeté sur le plan (axe1, axe3) et enfin celui sur le plan (axe2, axe3).  
+Le tracé du cercle des corrélations peut nous aider à apprécier ces corrélations, ainsi que la bonne représentation des différentes variables en termes de proximité vis-à-vis du bord du cercle (Figure 7). Dans la mesure où l’on a décidé ici de retenir 3 axes, il faut alors tracer trois graphiques distincts pour chaque nuage : le nuage projeté sur le plan (axe1, axe2), celui projeté sur le plan (axe1, axe3) et enfin celui sur le plan (axe2, axe3).  
 
 
 ```{r echo=FALSE, out.width='49%', fig.cap="Cercle des corrélations", fig.show='hold'}
@@ -393,7 +395,7 @@ Un examen identique de la seconde composante révèle que les eaux Talians (éch
 
 Enfin, les eaux Perrier (échantillon 58), Thonon (échantillon 74), Ste Marguerite (échantillon 68) et Badoit (échantillon 12) enregistrent les valeurs les plus élevées de la troisième composante. Ces eaux ont la particularité d’être fortement concentrées en NO3.  
 
-L’ACP a donc permis de mettre en évidence des groupements de propriétés minérales propres à certains types d’eaux, difficilement perceptible au premier coup d’oeil.  
+L’ACP a donc permis de mettre en évidence des groupements de propriétés minérales propres à certains types d’eaux, difficilement perceptibles au premier coup d’oeil.  
 
 En résumé, la contribution des individus aux différents axes (par ordre décroissant de contribution) est la suivante :
 
@@ -405,12 +407,12 @@ Axe 3 :  Perrier, Thonon, Ste Marguerite, Badoit
 
 ####   *Analyse croisée des variables et observations*
 
-Le tracé des graphiques de répartion des eaux par Nature (plates, gazeuses) dans les différents plans considérés est présenté ci-contre. Il permet notamment de mettre en relation les variables quantitatives précédemment étudiées avec la variable qualitative Nature, en considérant les individus bien représentés seulement. 
+Le tracé des graphiques de répartion des eaux par Nature (plates, gazeuses) dans les différents plans considérés est présenté Figure 8 (voir plus bas). Il permet notamment de mettre en relation les variables quantitatives précédemment étudiées avec la variable qualitative Nature, en considérant les individus bien représentés seulement. 
 
 En rouge, sont désignées les observations de nature gazeuse; en noir, les observations de nature plate. 
 Les cercles de corrélations ici dessinés sont ceux issus de notre fonction ACP.
 
-```{r echo=FALSE, out.width='49%', fig.cap="Cercle des corrélations", fig.show='hold', fig.align="center"}
+```{r echo=FALSE, out.width='49%', fig.cap="Cercles des corrélations et projection des individus dans les plans", fig.show='hold', fig.align="center"}
 acpn = function(data_in, round_precision = 3){  
   result = list()
   
@@ -579,7 +581,8 @@ acpcos2sup <- ligsup$lisup^2/apply(ligsup$lisup^2, 1, sum)
 round(acpcos2sup[,1:3]*1000)
 ```
 
-Seules les observations bien représentées peuvent être correctement analysées. L'observation #86 est, à titre d'exemple, très mal représentée, quel que soit le plan. Même chose pour l'observation #94 dans le plan 1-3. Nous nous focaliserons donc sur les autres observations.
+Seules les observations bien représentées peuvent être correctement analysées. L'observation #86 est, à titre d'exemple, très mal représentée, quel que soit le plan. Même chose pour l'observation #94 dans le plan 1-3. Nous nous focaliserons donc sur les autres observations.<br/> 
+
 
 ```{r echo=FALSE, out.width="49%", fig.show="hold"}
 csup1 <- ligsup$lisup[,1]
@@ -599,11 +602,6 @@ plot(axe2, axe3, type="n", main="Individus actifs et supplémentaires dans le pl
 abline(h=0,v=0)
 text(axe2, axe3, row.names(auto.acp$li))
 text(csup2, csup3, row.names(ligsup$lisup), col="red", cex=1.2)
-```
-```{r echo=FALSE, out.width='49%'}
-s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Cercle des corrélations dans le plan 1-2")
-s.corcircle(auto.acp$co, xax=1, yax=3); mtext("Cercle des corrélations dans le plan 1-3")
-s.corcircle(auto.acp$co, xax=2, yax=3); mtext("Cercle des corrélations dans le plan 2-3")
 ```
 
 *Interprétation :*
@@ -721,14 +719,12 @@ Un examen identique de la seconde composante ne révèle aucune indication suppl
 
 ####Analyse croisée des variables et observations
 ```{r echo=FALSE, out.width='49%', fig.cap="Projection des observations", fig.align="center",fig.show='hold'}
-s.label(new.auto.acp$li,xax=1,yax=2); mtext("Plan 1-2") 
-s.label(new.auto.acp$li,xax=1,yax=3); mtext("Plan 1-3") 
-s.label(new.auto.acp$li,xax=2,yax=3); mtext("Plan 2-3") 
+s.label(new.auto.acp$li,xax=1,yax=2); mtext("Plan 1-2")
 ```
 
 L'idée ici est d'analyser les individus qui ont fait l'objet d'une imputation.
 
-Comme on peut le voir dans le plan 1-2, l'eau Hydroxydase (échantillon 45) se distingue des autres échantillons de par ses fortes concentrations en Cl, HCO3, K, Mg et Na. C'est cette eau qui enregistre la plus haute composition en HCO3 (6722.2 mg/L) : c'est un outlier pour cette variable. L'eau Vichy St Yorre (échantillon 79) enregistre également de fortes concentrations pour ces variables, même si, dans une moindre mesure. Ces deux échantillons se distinguent facilement sur le premier graphique.
+Comme on peut le voir Figure 10, l'eau Hydroxydase (échantillon 45) se distingue des autres échantillons de par ses fortes concentrations en Cl, HCO3, K, Mg et Na. C'est cette eau qui enregistre la plus haute composition en HCO3 (6722.2 mg/L) : c'est un outlier pour cette variable. L'eau Vichy St Yorre (échantillon 79) enregistre également de fortes concentrations pour ces variables, même si, dans une moindre mesure. Ces deux échantillons se distinguent facilement sur le premier graphique.
 
 L'interprétation liée aux projections des individus imputés sur les autres plans ne pourra pas être aussi concluante, dans la mesure où leur qualité de représentation n'est pas (ou moins) significative, exception faite de l'échantillon 45. 
 
@@ -788,7 +784,7 @@ On remarque que :
 
 Seule les corrélations mettant en jeu la variable Mg sont donc ici différentes. Pour le reste, les corrélations sur chacune des différentes composantes restent inchangées.
 
-Il semblerait également que cette configuration soit propice à une meilleure représentation de la variable PH, désormais plus proche du bord du cercle des corrélations dans les plans 1-3 et 2-3, comme on peut le voir ci-contre :
+Il semblerait également que cette configuration soit propice à une meilleure représentation de la variable PH, désormais plus proche du bord du cercle des corrélations dans les plans 1-3 et 2-3, comme on peut le voir au sein de la Figure 11.
 
 ```{r echo=FALSE, out.width='49%', fig.cap="Cercle des corrélations", fig.align="center", fig.show='hold'}
 s.corcircle(auto.acp$co, xax=1, yax=2); mtext("Plan 1-2")
@@ -863,7 +859,7 @@ round(qualites[c(4,15,16,32),]*1000)/10
 
 ```
 
-On peut voir que désormais, les qualités dont bien plus réparties sur les trois axes. La forte influence de certains individus sur un axe en particulier, due à leurs valeurs extrêmes est le biais que nous souhaitions réduire. On peut donc confirmer qu'il a été absorbé.  
+On peut voir que les qualités sont désormais bien mieux réparties sur les trois axes (Figure 12). La forte influence de certains individus sur un axe en particulier, dûe à leurs valeurs extrêmes, est le biais que nous souhaitions réduire. On peut donc confirmer qu'il a été absorbé.  
 
 ```{r, echo=FALSE, fig.width=9, fig.height=7, fig.show='hold', out.width="49%", fig.cap="Projection des individus actifs (noirs) et supplémentaires (rouges)"}
 cl1 <- auto.acp$li[,1]
@@ -872,11 +868,6 @@ cl3 <- auto.acp$li[,3]
 csup1 <- outliers.acp$lisup[,1]
 csup2 <- outliers.acp$lisup[,2]
 csup3 <- outliers.acp$lisup[,3]
-# Graphe des observations actives et supplémentaires - plan 1-2
-plot(cl1, cl2, type="n", main="Plan 1-2")
-abline(h=0,v=0)
-text(cl1, cl2, row.names(auto.acp$li))
-text(csup1, csup2, row.names(outliers.acp$lisup), col="red", cex=1.2,)
 
 # Graphe des observations actives et supplémentaires - plan 1-3
 plot(cl1, cl3, type="n", main="Plan 1-3")
@@ -889,8 +880,6 @@ abline(h=0,v=0)
 text(cl2, cl3, row.names(auto.acp$li))
 text(csup2, csup3, row.names(outliers.acp$lisup), col="red", cex=1.2)
 ```
-En représentant toutes les observations, on peut voir que les individus supplémentaires ont des positions plus équilibrées ce qui confirme cette observation.
-
 
 ##2.4. Classification non supervisée de type k-means
 
@@ -905,9 +894,13 @@ Même si l'algorithme est déjà implémenté, il nous faut quand même trouver 
   
 Un nombre classique de classes est $\sqrt{2/n}$, notre n étant le nombre d'individus (c'est-à-dire 63 après avoir filtré les données); un k optimal s'approcherait de 6. On va confirmer cette hypothèse avec la méthode suivante :  
   
-Quand on applique l'algorithme, il nous renvoie la somme des carrées des distances entre les individus et le centre des classes. Une part plus petite par rapport à la somme de toutes les distances étant meilleure, on peut dessiner le graphique de cette part, en fonction de k. En observant les décrochages de la courbe, on peut alors décider d'un k satisfaisant.  
+Quand on applique l'algorithme, il nous renvoie la somme des carrées des distances entre les individus et le centre des classes. Une part plus petite par rapport à la somme de toutes les distances étant meilleure, on peut dessiner le graphique de cette part, en fonction de k. En observant les décrochages de la courbe, on peut alors décider d'un k satisfaisant (Figure 13).  
   
-```{r echo=FALSE, fig.align='center', fig.cap="Qualité de la classification en fonction du nombre de classes"}
+Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire. On préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
+  
+Le graphique montre qu'à k=5, la qualité de représentation ne progresse plus beaucoup; 5 semble donc être un choix raisonnable. Une fois exécuté, l'algorithme nous revoie un tableau des individus classés.
+
+```{r echo=FALSE, fig.align='center', fig.cap="Qualité de la classification en fonction du nombre de classes",out.width='49%'}
 data = na.omit(waters[sapply(waters, is.numeric)])
 
 set.seed(3)
@@ -919,12 +912,7 @@ values = sapply(2:10, function(k){
 })
 
 plot(2:10,values, type="b", xlab="Nombre de clusters", ylab = "Part des distances entre individus et centre des classes", main=" ")
-
 ```
-Il faut aussi préciser que la fonction kmeans incorpore de l'aléatoire. On préfère donc fixer la graine de l'aléatoire afin d'avoir toujours les mêmes résultats.
-  
-Le graphique montre qu'à k=5, la qualité de représentation ne progresse plus beaucoup; 5 semble donc être un choix raisonnable. Une fois executé, l'algorithme nous revoie un tableau des individus classés.
-
 ```{r echo=FALSE, fig.align='center', fig.cap="Représentation des individus classés",echo=FALSE,fig.show='hold', out.width="49%"}
 acp = dudi.pca(data, scannf = FALSE, nf=3)
 
@@ -934,7 +922,7 @@ plot(acp$li[,2], acp$li[,3], xlab = "Axe 2", ylab = "Axe 3", type="n", main="Pla
 text(x=acp$li[,2], y=acp$li[,3], labels = row.names(acp$li), col=unname(classi$cluster))
 ```
 
-En appliquant les résultats de ce tableau sur une représentation issue de l'ACP, on peut observer que la classification groupe bien des individus similaires, c'est à dire proches les uns des autres même quand on réduit les dimensions. Si deux classes semblent se mélanger (bleue et rouge) sur le plan 1-2, on peut confirmer leur distinction avec une autre dimension (plan 2-3).  
+En appliquant les résultats de ce tableau sur une représentation issue de l'ACP, on peut observer que la classification groupe bien des individus similaires, c'est à dire proches les uns des autres même lorsque l'on réduit les dimensions. Si deux classes semblent se mélanger (bleue et rouge) sur le plan 1-2, on peut confirmer leur distinction avec une autre dimension (plan 2-3).  
   
 Ainsi, les résultats de notre analyse en composantes principales et de notre classification sont cohérents l'un par rapport à l'autre.
 
