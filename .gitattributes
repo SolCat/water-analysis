@@ -1,2 +1,4 @@
+*.tex linguist-detectable=false
 *.R linguist-detectable=true
 *.R linguist-language=R
+
